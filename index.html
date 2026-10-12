@@ -1,866 +1,225 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f7f8fb">
-<title>古文単語315 | 5秒全義リコール + 適応復習</title>
+<meta name="theme-color" content="#f5f7fc">
+<meta name="description" content="古文単語315を1日5語ずつ。意味を思い出す練習と間隔反復で、定着を目指す学習アプリです。">
+<title>古文単語315 | 1日5語・定着トレーニング</title>
 <style>
-:root{
-  --bg:#f6f7fb;--panel:#fff;--text:#15171c;--muted:#6e7480;--line:#e7e9ef;
-  --accent:#7c3aed;--accent2:#f1eafe;--ok:#138a56;--okbg:#e8f7ef;
-  --bad:#c43d3d;--badbg:#fff0f0;--warn:#a66400;--warnbg:#fff7e6;
-  --shadow:0 12px 32px rgba(20,28,50,.08);--radius:22px;
-}
+:root{--page:#f5f7fc;--white:#fff;--ink:#1b2840;--soft:#65748c;--muted:#8997ac;--line:#e5eaf3;--blue:#4867de;--blue2:#edf1ff;--mint:#13a98e;--mintbg:#e6f8f2;--orange:#e09a2e;--orangebg:#fff4dc;--red:#dd6670;--redbg:#fff0f1;--shadow:0 10px 34px rgba(28,45,89,.055);--radius:23px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Yu Gothic UI","Yu Gothic",sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-button:disabled{cursor:default}
-.app{max-width:620px;margin:0 auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(92px + env(safe-area-inset-bottom))}
-.topbar{height:66px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand{font-weight:850;letter-spacing:-.02em;font-size:18px}
-.brand small{display:block;color:var(--muted);font-weight:650;font-size:11px;letter-spacing:.02em;margin-top:2px}
-.view{display:none}
-.view.active{display:block}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.hero{padding:22px}
-.hero h1{font-size:27px;line-height:1.2;margin:0 0 8px;letter-spacing:-.04em}
-.hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
-.data-status{margin-top:18px;padding:14px 15px;border-radius:16px;background:#f8f9fc;border:1px solid var(--line);display:flex;gap:12px;align-items:center}
-.dot{width:10px;height:10px;border-radius:50%;background:#b6bbc6;flex:none}
-.dot.ready{background:var(--ok);box-shadow:0 0 0 5px var(--okbg)}
-.data-status strong{display:block;font-size:14px}
-.data-status span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.primary,.secondary,.danger,.good,.badbtn{border:0;border-radius:16px;min-height:52px;padding:13px 17px;font-weight:850}
-.primary{background:var(--accent);color:#fff;width:100%;box-shadow:0 8px 18px rgba(124,58,237,.20)}
-.secondary{background:#f0f2f6;color:#242731}
-.danger{background:var(--badbg);color:var(--bad)}
-.good{background:var(--okbg);color:var(--ok)}
-.badbtn{background:var(--badbg);color:var(--bad)}
-.section-title{font-size:13px;color:var(--muted);font-weight:850;margin:22px 4px 9px}
-.settings-card{padding:18px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.row .label strong{display:block;font-size:14px}
-.row .label span{font-size:12px;color:var(--muted)}
-.num{width:86px;border:1px solid var(--line);border-radius:12px;padding:10px 9px;text-align:center;background:#fff}
-select{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 28px 10px 10px}
-.range-pair{display:flex;gap:6px;align-items:center}
-.range-pair .num{width:74px}
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px}
-.stat .v{font-size:24px;font-weight:900;letter-spacing:-.04em}
-.stat .k{font-size:12px;color:var(--muted);margin-top:2px}
-.notice{background:var(--warnbg);color:#714a08;padding:12px 14px;border-radius:14px;font-size:12px;line-height:1.6;margin-top:12px}
-.rulebox{margin-top:12px;border:1px solid #e5dcfa;background:#faf7ff;border-radius:16px;padding:13px 14px;font-size:12px;line-height:1.65;color:#51445f}
-.rulebox b{color:#45207d}
-
-.plan-card{padding:18px}
-.plan-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.plan-kicker{display:inline-block;font-size:11px;font-weight:900;color:var(--accent);background:var(--accent2);border-radius:999px;padding:5px 8px;margin-bottom:7px}
-.plan-card h2{font-size:20px;line-height:1.3;letter-spacing:-.03em;margin:0}
-.plan-card .plan-subline{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5}
-.plan-badge{flex:none;min-width:70px;text-align:center;border-radius:14px;background:#f2f4f8;padding:10px 8px;font-weight:900;font-variant-numeric:tabular-nums}
-.plan-badge small{display:block;font-size:9px;color:var(--muted);font-weight:800;margin-top:2px}
-.plan-progress{height:9px;background:#e8eaf0;border-radius:999px;overflow:hidden;margin:16px 0 10px}
-.plan-progress>div{height:100%;background:var(--accent);border-radius:999px;transition:width .25s ease}
-.plan-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}
-.plan-metric{border:1px solid var(--line);border-radius:14px;padding:10px 11px;background:#fafbfc}
-.plan-metric span{display:block;color:var(--muted);font-size:10px;font-weight:800}
-.plan-metric b{display:block;font-size:20px;margin-top:1px}
-.plan-note{font-size:11px;color:var(--muted);line-height:1.6;margin:10px 2px 0}
-.plan-cap-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:#fafbfc;border-radius:14px;padding:11px 12px;margin:8px 0 12px}
-.plan-cap-row strong{display:block;font-size:12px}.plan-cap-row span{display:block;font-size:10px;color:var(--muted);line-height:1.45;margin-top:2px}
-.plan-cap-row select{flex:none;min-width:92px}
-.plan-backlog{background:var(--warnbg);color:#714a08;border-radius:13px;padding:9px 11px;font-size:11px;line-height:1.5;margin:0 0 11px}
-.plan-settings{margin-top:13px;border-top:1px solid var(--line);padding-top:11px}
-.plan-settings summary{cursor:pointer;font-size:12px;font-weight:850;color:#4f5663;list-style:none}
-.plan-settings summary::-webkit-details-marker{display:none}
-.plan-settings summary:after{content:"＋";float:right;color:var(--muted)}
-.plan-settings[open] summary:after{content:"−"}
-.plan-start-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
-.plan-start-row label{font-size:12px;color:var(--muted);font-weight:700}
-.plan-start-row input{border:1px solid var(--line);border-radius:11px;padding:9px 10px;background:#fff;max-width:160px}
-.plan-schedule{display:flex;flex-direction:column;gap:6px;margin-top:12px;max-height:300px;overflow:auto;padding-right:2px}
-.plan-dayrow{display:grid;grid-template-columns:58px 1fr auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px 10px;font-size:11px;background:#fff}
-.plan-dayrow.today{border-color:#b7a1ef;background:#faf7ff}
-.plan-dayrow.done{background:#f3faf6}
-.plan-dayrow .day{font-weight:900}
-.plan-dayrow .range{color:#4f5663;line-height:1.35}
-.plan-dayrow .date{color:var(--muted);font-variant-numeric:tabular-nums}
-.plan-complete{background:var(--okbg);color:var(--ok);border-radius:14px;padding:11px 12px;font-size:12px;font-weight:800;margin-bottom:12px}
-.start-wrap{position:sticky;bottom:82px;margin-top:18px;z-index:3}
-
-.nav{position:fixed;z-index:20;left:50%;transform:translateX(-50%);bottom:0;width:min(620px,100%);padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(246,247,251,.94);backdrop-filter:blur(14px);border-top:1px solid rgba(220,223,231,.8);display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.nav button{border:0;background:transparent;color:#767c87;border-radius:13px;min-height:54px;font-size:11px;font-weight:800}
-.nav button .ico{display:block;font-size:20px;line-height:23px;margin-bottom:1px}
-.nav button.active{background:#eee8fc;color:var(--accent)}
-
-.study-top{display:flex;align-items:center;gap:12px;margin:5px 0 12px}
-.progress-track{height:7px;background:#e4e7ed;border-radius:20px;overflow:hidden;flex:1}
-.progress-bar{height:100%;width:0;background:var(--accent);transition:width .25s ease}
-.counter{font-size:12px;color:var(--muted);font-weight:800;white-space:nowrap}
-.word-card{padding:26px 20px 21px;min-height:420px;display:flex;flex-direction:column;position:relative;overflow:hidden}
-.meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px;font-weight:700}
-.word-zone{flex:1;display:grid;place-items:center;text-align:center;padding:32px 8px 16px}
-.word{font-size:clamp(34px,10vw,58px);font-weight:900;letter-spacing:-.045em;overflow-wrap:anywhere;line-height:1.28}
-.prompt-help{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.55}
-.timerbox{margin-top:4px}
-.timerline{height:5px;border-radius:10px;background:#e8eaf0;overflow:hidden}
-.timerfill{height:100%;width:100%;background:var(--accent);transform-origin:left;will-change:transform}
-.timertext{text-align:center;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:5px;font-weight:800}
-.knowbtn{width:100%;border:0;border-radius:18px;background:var(--accent);color:#fff;min-height:64px;font-size:17px;font-weight:900;margin-top:14px}
-.answer-panel{display:none;margin-top:15px;padding-top:16px;border-top:1px solid var(--line)}
-.answer-panel.show{display:block}
-.answer-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px}
-.meaning-count{border-radius:999px;background:#f0edf8;color:#68577c;padding:4px 8px;font-size:10px}
-.answer{display:flex;flex-direction:column;gap:7px}
-.meaning-item{display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:start;border:1px solid #ebe7f3;border-radius:13px;padding:10px 11px;background:#fcfbff;font-size:17px;font-weight:780;line-height:1.45}
-.meaning-num{width:24px;height:24px;border-radius:999px;background:var(--accent2);color:var(--accent);display:grid;place-items:center;font-size:11px;font-weight:900;margin-top:1px}
-.answer-hint{font-size:10px;color:var(--muted);margin-top:8px;font-weight:700;line-height:1.5}
-.resulttag{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800;margin-top:12px}
-.resulttag.ok{background:var(--okbg);color:var(--ok)}
-.resulttag.bad{background:var(--badbg);color:var(--bad)}
-.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
-.choice-grid.one{grid-template-columns:1fr}
-.session-note{font-size:12px;color:var(--muted);text-align:center;margin:12px 0 0;line-height:1.6}
-.session-summary{padding:25px;text-align:center}
-.summary-num{font-size:52px;font-weight:900;letter-spacing:-.06em;margin:6px 0}
-.summary-sub{color:var(--muted);font-size:13px}
-
-.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
-.search{flex:1;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px 13px}
-.mistake-list{display:flex;flex-direction:column;gap:9px}
-.mistake{padding:15px 14px}
-.mistake .head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.mistake .en{font-size:21px;font-weight:900;letter-spacing:-.02em}
-.mistake .jp{font-size:13px;color:#444a55;line-height:1.65;margin-top:5px}
-.mistake .jp .mini-meaning{display:block}
-.stats-foot{font-size:11px;color:var(--muted);line-height:1.55;margin-top:12px}
-.pill{background:var(--badbg);color:var(--bad);border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800;white-space:nowrap}
-.mistake .foot{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;margin-top:9px}
-.bigcard{padding:18px}
-.bar-row{margin:14px 0}
-.bar-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
-.bar-bg{height:8px;border-radius:10px;background:#eceef3;overflow:hidden}
-.bar-v{height:100%;background:var(--accent);border-radius:10px}
-.info{padding:19px}
-.info h2{font-size:17px;margin:0 0 8px}
-.info p,.info li{font-size:13px;line-height:1.7;color:#4e5561}
-.info ul{padding-left:20px}
-.empty{text-align:center;color:var(--muted);padding:35px 12px;font-size:13px}
-.toast{position:fixed;z-index:50;left:50%;bottom:100px;transform:translate(-50%,15px);background:#20232a;color:#fff;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:700;opacity:0;pointer-events:none;transition:.2s;max-width:88%;text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-@media (max-width:380px){
-  .app{padding-left:12px;padding-right:12px}
-  .word-card{min-height:390px}
-  .meaning-item{font-size:16px}
-  .choice-grid{grid-template-columns:1fr}
-}
+html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;line-height:1.55}
+button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.48}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #a4b7ff;outline-offset:3px}
+.wrap{max-width:760px;margin:auto;padding:0 20px calc(100px + env(safe-area-inset-bottom));min-height:100dvh}
+.head{display:flex;align-items:center;justify-content:space-between;padding:25px 2px 18px;gap:12px}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}.logo{display:grid;place-items:center;width:42px;height:42px;flex:none;border-radius:14px;background:var(--blue);color:#fff;box-shadow:0 6px 16px rgba(72,103,222,.22)}.logo svg{width:23px;height:23px}
+.brand-name{font-weight:850;letter-spacing:-.045em;font-size:18px;line-height:1.25}.brand-sub{color:var(--soft);font-size:11px;font-weight:620;line-height:1.4;letter-spacing:.01em}.head-date{font-weight:750;font-size:12px;color:var(--soft);text-align:right;white-space:nowrap}
+.page{display:none;animation:rise .2s ease}.page.active{display:block}@keyframes rise{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.11em;font-weight:850;color:var(--blue)}.h2{font-size:18px;font-weight:850;letter-spacing:-.03em;margin:0 0 12px}
+.white-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{background:linear-gradient(125deg,#304fc2,#526fe1 65%,#6885f1);border-radius:27px;color:white;padding:27px 27px 25px;position:relative;overflow:hidden;box-shadow:0 14px 35px rgba(65,96,214,.16)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.17);pointer-events:none}.hero:before{width:240px;height:240px;right:-85px;top:-117px}.hero:after{width:155px;height:155px;right:-43px;top:-35px}
+.hero .kicker{color:#dbe4ff;position:relative}.hero h1{font-size:clamp(24px,4.8vw,31px);font-weight:900;letter-spacing:-.055em;line-height:1.42;margin:10px 0 8px;position:relative}.hero p{font-size:13px;line-height:1.85;color:#e8eeff;max-width:490px;margin:0;position:relative}
+.hero-bottom{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:21px;position:relative}.hero-bottom .big{font-size:24px;font-weight:900;letter-spacing:-.045em}.hero-bottom .tiny{font-size:12px;color:#e6eaff;font-weight:650}.hero-track{height:8px;background:#ffffff40;border-radius:100px;overflow:hidden;position:relative;margin-top:8px}.hero-track>div{height:100%;width:0;background:#fff;border-radius:100px;transition:width .3s}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:27px 2px 11px}.section-head h2{font-size:18px;font-weight:870;letter-spacing:-.035em;margin:0}.section-head .sub{font-size:11px;color:var(--soft)}
+.today-box{padding:19px 20px}.today-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.today-title{font-size:17px;font-weight:850;letter-spacing:-.03em}.small-chip{border-radius:999px;background:var(--blue2);color:var(--blue);font-size:11px;font-weight:850;padding:5px 10px;white-space:nowrap}
+.pips{display:flex;gap:8px;margin:17px 0 15px}.pip{height:10px;border-radius:100px;flex:1;background:#eaf0f9;transition:background .2s}.pip.done{background:var(--mint)}
+.menu-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:15px 0 19px}.menu-tile{background:#f8f9fd;border:1px solid #eef1f7;padding:12px 9px;border-radius:15px;text-align:center}.menu-tile strong{font-size:25px;font-weight:900;letter-spacing:-.05em;display:block;line-height:1.3}.menu-tile span{font-size:10px;color:var(--soft);font-weight:730;display:block;margin-top:4px}.menu-tile.warn strong{color:var(--orange)}
+.btn{appearance:none;border:0;border-radius:15px;padding:14px 17px;min-height:52px;font-size:14px;font-weight:870;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:filter .14s,transform .12s}.btn:active:not(:disabled){transform:scale(.986)}.btn-primary{color:#fff;background:var(--blue);box-shadow:0 8px 18px rgba(72,103,222,.16)}.btn-light{color:var(--blue);background:var(--blue2)}.btn-subtle{color:#4d5e78;background:#f0f3f8}.btn-green{background:var(--mint);color:#fff}.btn-danger-soft{background:var(--redbg);color:#be4b58}.btn-outline{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn-block{display:flex;width:100%}.btn-link{background:none;border:none;color:var(--blue);font-weight:820;padding:9px 3px;font-size:12px}
+.today-note{color:var(--soft);font-size:12px;line-height:1.8;margin:12px 0 0}.quiet-warning{color:#975c13;font-size:12px;border-radius:13px;background:var(--orangebg);padding:11px 13px;margin:12px 0 0}.inline-actions{display:flex;gap:9px;margin-top:11px;flex-wrap:wrap}.inline-actions .btn{flex:1;min-width:135px}
+.journey{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.journey>div{padding:15px 12px}.step-ico{font-size:18px;display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--blue2);color:var(--blue);font-weight:900;margin-bottom:12px}.journey h3{font-size:13px;letter-spacing:-.01em;margin:0 0 4px}.journey p{font-size:11px;color:var(--soft);line-height:1.7;margin:0}
+.bottom-nav{position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);width:min(760px,100%);display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:9px 15px calc(9px + env(safe-area-inset-bottom));border-top:1px solid #dce3ef;background:rgba(255,255,255,.96);backdrop-filter:blur(15px);box-shadow:0 -4px 28px #2b3d6510}.nav-item{color:#8996a9;border:0;background:none;border-radius:13px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;min-height:50px;font-size:10px;font-weight:800}.nav-item svg{height:21px;width:21px;stroke-width:1.9}.nav-item.active{background:var(--blue2);color:var(--blue)}
+.study-header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:1px 1px 13px}.small-label{font-size:12px;color:var(--soft);font-weight:790}.study-track{height:7px;background:#e8ebf3;border-radius:90px;overflow:hidden;margin:0 0 20px}.study-track>div{height:100%;background:var(--mint);transition:width .2s}
+.study-card{min-height:min(540px,68vh);padding:23px;display:flex;flex-direction:column;overflow:hidden}.study-meta{display:flex;justify-content:space-between;gap:8px;align-items:center}.pill{border-radius:999px;background:var(--blue2);color:var(--blue);font-size:11px;font-weight:880;padding:6px 11px}.pill.review{background:#e6f8f2;color:#068a70}.pill.retry{background:var(--orangebg);color:#ac7522}.word-number{font-size:12px;color:var(--muted);font-weight:850}.word-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:25px 0 20px}.word-big{font-size:clamp(36px,9vw,60px);font-weight:900;letter-spacing:-.06em;line-height:1.35;overflow-wrap:anywhere}.word-question{font-size:13px;color:var(--soft);margin-top:16px;line-height:1.8}.meaning-spot{width:100%;border-radius:17px;padding:20px 14px;background:#f4f7ff;margin-top:21px}.meaning-tag{font-size:11px;font-weight:850;letter-spacing:.08em;color:var(--blue)}.meaning-big{font-weight:830;letter-spacing:-.025em;font-size:clamp(21px,5vw,27px);margin-top:6px;overflow-wrap:anywhere;line-height:1.5}.learn-tip{font-size:12px;color:var(--soft);margin-top:13px;line-height:1.75}.study-actions{margin-top:auto;display:grid;gap:10px}.study-actions.double{grid-template-columns:1fr 1fr}.study-actions .btn{min-height:59px;font-size:14px}.time-row{margin-bottom:11px}.time-top{display:flex;justify-content:space-between;align-items:center;gap:6px;color:var(--soft);font-size:12px;font-weight:750;margin-bottom:8px}.timer-track{height:6px;background:#e8ecf5;border-radius:20px;overflow:hidden}.timer-track>div{height:100%;width:100%;transform-origin:left;background:var(--blue)}.timer-track>div.urgent{background:var(--orange)}.feedback-label{font-size:13px;font-weight:850;text-align:center;color:var(--red);margin-bottom:8px}.study-footnote{font-size:12px;line-height:1.7;color:var(--soft);text-align:center;margin-top:17px;padding:0 12px}
+.result-card{padding:35px 24px;text-align:center}.result-emblem{width:66px;height:66px;margin:auto;border-radius:20px;display:grid;place-items:center;color:var(--mint);background:var(--mintbg);font-size:34px;font-weight:880}.result-card h2{margin:18px 0 4px;font-size:24px;letter-spacing:-.03em}.result-lede{color:var(--soft);font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);margin:24px 0;gap:8px}.result-grid>div{padding:14px 7px;border:1px solid var(--line);border-radius:14px}.result-grid b{display:block;font-weight:900;font-size:25px}.result-grid span{font-size:11px;color:var(--soft)}.result-info{background:#f7f9fc;border-radius:15px;padding:15px;color:#56637a;font-size:12px;line-height:1.8;margin:0 0 20px}.result-actions{display:grid;gap:10px}
+.page-title{font-size:25px;letter-spacing:-.04em;font-weight:900;margin:5px 1px 5px}.page-sub{font-size:13px;color:var(--soft);line-height:1.8;margin:0 1px 22px}.tool-row{display:flex;gap:8px;margin-bottom:14px}.input{width:100%;border-radius:13px;border:1px solid var(--line);background:white;padding:13px 12px;min-height:46px;color:var(--ink);outline:0}.input:focus{border-color:#b0bfff}.tool-row .input{flex:1;min-width:0}.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:17px}.filter{border:1px solid var(--line);background:#fff;color:var(--soft);padding:9px 14px;border-radius:999px;font-size:12px;font-weight:850}.filter.active{background:var(--blue);border-color:var(--blue);color:#fff}.weak-list{display:grid;gap:10px}.weak-card{padding:17px 18px}.weak-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.weak-head strong{font-size:22px;letter-spacing:-.04em}.weak-head .count{background:var(--redbg);color:#c04e5d;font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;white-space:nowrap}.weak-meta{color:var(--soft);font-size:11px;margin:6px 0 10px}.weak-answer{background:#f6f8fd;border-radius:12px;padding:12px 14px;font-weight:750;font-size:15px;margin:12px 0;display:none}.weak-answer.open{display:block}.weak-actions{display:flex;align-items:center;gap:10px}.weak-actions button{min-height:38px;padding:8px 14px;font-size:12px}.empty{padding:45px 15px;text-align:center;color:var(--soft);font-size:13px;line-height:1.8}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat-card{padding:19px}.stat-card .value{font-size:28px;font-weight:900;letter-spacing:-.05em}.stat-card .desc{color:var(--soft);font-weight:730;font-size:11px;margin-top:1px}.block{padding:21px;margin-top:14px}.block h2{font-size:16px;letter-spacing:-.03em;margin:0 0 7px}.block-sub{font-size:12px;color:var(--soft);margin:0 0 16px;line-height:1.7}.stage-row{margin:15px 0}.stage-top{display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:8px;margin-bottom:7px}.stage-top b{font-size:13px}.bar-bg{background:#eaf0f8;border-radius:30px;height:10px;overflow:hidden}.bar-fill{height:100%;width:0;border-radius:30px;background:var(--blue)}.bar-fill.mint{background:var(--mint)}.bar-fill.amber{background:var(--orange)}.band-row{margin:16px 0 18px}.band-meta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:6px}.band-meta b{font-weight:880}.band-meta small{font-size:11px;color:var(--soft)}.band-bar{width:100%;height:11px;border-radius:30px;background:#e9edf5;overflow:hidden;position:relative}.band-visited{position:absolute;inset:0 auto 0 0;background:#bed0fc}.band-stable{position:absolute;inset:0 auto 0 0;background:var(--mint)}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--soft);margin:7px 0 0}.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}.mini-chart{height:85px;display:grid;grid-template-columns:repeat(14,1fr);align-items:end;gap:5px;padding-bottom:1px}.mini-bar{height:100%;display:flex;flex-direction:column;justify-content:flex-end}.mini-bar>div{min-height:3px;border-radius:5px 5px 2px 2px;background:#bdcbf8}.mini-bar.today>div{background:var(--blue)}.mini-axis{display:flex;justify-content:space-between;gap:6px;font-size:10px;color:var(--muted);margin-top:5px}
+.settings-form{display:grid;gap:10px}.setting{display:flex;gap:12px;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}.setting h3{font-size:13px;margin:0;font-weight:850}.setting p{font-size:11px;color:var(--soft);line-height:1.65;margin:3px 0 0}.setting select{border:1px solid var(--line);background:#fff;border-radius:12px;min-height:39px;min-width:106px;padding:8px;color:var(--ink);font-weight:750}
+.details{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}.details summary{cursor:pointer;font-size:13px;font-weight:850;list-style:none;color:var(--ink)}.details summary::-webkit-details-marker{display:none}.details summary:after{content:"＋";float:right;color:var(--soft)}.details[open] summary:after{content:"−"}.details ul{margin:10px 0 0;padding-left:19px}.details li{font-size:12px;color:#586782;line-height:1.95}
+.file-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tiny-note{font-size:11px;color:var(--soft);line-height:1.8;margin:12px 0 0}.toast{position:fixed;bottom:95px;left:50%;z-index:60;transform:translate(-50%,15px);width:max-content;max-width:calc(100vw - 30px);background:#26324e;color:white;padding:12px 16px;border-radius:13px;font-size:12px;font-weight:750;box-shadow:0 8px 25px #16224250;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
+[hidden]{display:none!important}
+@media(max-width:480px){.wrap{padding:0 15px calc(95px + env(safe-area-inset-bottom))}.head{padding-top:18px}.head-date{font-size:10px}.brand-name{font-size:16px}.hero{padding:24px 21px}.today-box{padding:18px}.journey{gap:7px}.journey>div{padding:13px 10px}.journey p{font-size:10px}.study-card{padding:20px;min-height:min(525px,72vh)}.study-actions.double .btn{padding:10px;font-size:13px}.menu-tile strong{font-size:22px}}
+@media(max-width:350px){.head-date{display:none}.study-actions.double{grid-template-columns:1fr}.menu-tile span{font-size:9px}.journey{grid-template-columns:1fr}.journey>div{display:flex;gap:11px;align-items:center}.step-ico{margin:0;flex:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="topbar">
-    <div class="brand">古文単語315 <small>5秒・全義リコール · 適応復習 · 1日20語</small></div>
-  </header>
-
-  <main>
-    <section class="view active" id="homeView">
-      <div class="card hero">
-        <h1>意味を全部、思い出してから答えを見る。</h1>
-        <p>古文単語を見て、5秒以内にExcelにある意味をすべて想起。1つでも抜けたら誤答として、次の復習を自動調整します。</p>
-        <div class="data-status">
-          <span class="dot ready" id="dataDot"></span>
-          <div><strong id="dataTitle">315語を収録済み</strong><span id="dataSub">ファイル読み込み不要ですぐ学習できます</span></div>
-        </div>
-        <div class="rulebox"><b>正解条件：</b>表示された単語について、登録されている意味を<b>全部</b>言えたこと。似た意味でも、1項目でも抜けた・違った場合は「抜け・違いあり」を選びます。</div>
-      </div>
-
-      <div class="section-title">今日の状態</div>
-      <div class="stats-grid">
-        <div class="stat"><div class="v" id="dueStat">—</div><div class="k">復習期限</div></div>
-        <div class="stat"><div class="v" id="wrongStat">—</div><div class="k">誤答履歴</div></div>
-        <div class="stat"><div class="v" id="todayStat">—</div><div class="k">今日の回答</div></div>
-        <div class="stat"><div class="v" id="accStat">—</div><div class="k">累計正答率</div></div>
-      </div>
-
-      <div class="section-title">1日20語・16日学習計画</div>
-      <div class="card plan-card">
-        <div id="planComplete" class="plan-complete" style="display:none">315語の新出学習が完了しています。以後は期限復習を中心に進めます。</div>
-        <div class="plan-top">
-          <div>
-            <span class="plan-kicker" id="planDayLabel">Day 1 / 16</span>
-            <h2 id="planTitle">Section 1 · No.1–20</h2>
-            <div class="plan-subline" id="planDateText">今日の新出20語</div>
-          </div>
-          <div class="plan-badge"><span id="planNewProgress">0 / 20</span><small>新出進捗</small></div>
-        </div>
-        <div class="plan-progress"><div id="planProgressBar" style="width:0%"></div></div>
-        <div class="plan-metrics">
-          <div class="plan-metric"><span>今日まだ新出</span><b id="planRemaining">20</b></div>
-          <div class="plan-metric"><span>今日出す復習 / 期限</span><b id="planDue">0</b></div>
-        </div>
-        <div class="plan-cap-row">
-          <div><strong>1日の復習上限</strong><span>新出20語とは別枠。多すぎる復習は優先順位をつけて繰り越します。</span></div>
-          <select id="reviewCap"><option value="10">10語</option><option value="20">20語</option><option value="30" selected>30語</option><option value="50">50語</option><option value="0">上限なし</option></select>
-        </div>
-        <div class="plan-backlog" id="planBacklog" style="display:none"></div>
-        <button class="primary" id="planStartBtn">今日の学習を始める</button>
-        <div class="plan-note">「1日20語」は新しく触れる語数です。復習は5秒以内の正答速度・誤答履歴・前回の間隔から個別に決めます。誤答語は数問後に再テストし、翌日にも確認します。</div>
-        <details class="plan-settings">
-          <summary>計画の開始日・16日分の予定を見る</summary>
-          <div class="plan-start-row"><label for="planStartDate">Day 1 の開始日</label><input id="planStartDate" type="date"></div>
-          <div class="plan-schedule" id="planSchedule"></div>
-        </details>
-      </div>
-
-      <div class="section-title">自由学習の設定</div>
-      <div class="card settings-card">
-        <div class="row">
-          <div class="label"><strong>範囲</strong><span>No.で指定</span></div>
-          <div class="range-pair"><input class="num" id="rangeStart" type="number" min="1" value="1"><span>〜</span><input class="num" id="rangeEnd" type="number" min="1" value="315"></div>
-        </div>
-        <div class="row">
-          <div class="label"><strong>1セッション</strong><span>復習期限の単語を優先</span></div>
-          <select id="sessionSize"><option>10</option><option selected>20</option><option>40</option><option>60</option></select>
-        </div>
-      </div>
-      <div class="start-wrap"><button class="primary" id="startBtn">自由範囲で学習を始める</button></div>
-    </section>
-
-    <section class="view" id="studyView">
-      <div class="study-top">
-        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
-        <div class="counter" id="studyCounter">0 / 0</div>
-      </div>
-
-      <div id="studyCardWrap">
-        <div class="card word-card">
-          <div class="meta"><span id="wordNo">No.—</span><span id="wordSection">Section —</span></div>
-          <div class="word-zone">
-            <div>
-              <div class="word" id="wordText">準備</div>
-              <div class="prompt-help" id="promptHelp">意味を全部思い出せたら、5秒以内に下のボタンを押す</div>
-            </div>
-          </div>
-          <div class="timerbox" id="timerBox">
-            <div class="timerline"><div class="timerfill" id="timerFill"></div></div>
-            <div class="timertext" id="timerText">5.0 秒</div>
-          </div>
-          <button class="knowbtn" id="knowBtn">全部思い出せた</button>
-          <div class="answer-panel" id="answerPanel">
-            <div class="answer-label"><span>登録されている意味</span><span class="meaning-count" id="meaningCount"></span></div>
-            <div class="answer" id="answerText"></div>
-            <div class="answer-hint">ここに出た項目をすべて言えていれば正解。1つでも抜け・意味違いがあれば誤答にします。</div>
-            <span class="resulttag" id="resultTag"></span>
-            <div class="choice-grid" id="choiceGrid"></div>
-          </div>
-        </div>
-        <p class="session-note">「全部思い出せた」は、答えを見る前に全義が出たときだけ。5秒を過ぎると自動で誤答です。</p>
-      </div>
-
-      <div id="summaryWrap" style="display:none">
-        <div class="card session-summary">
-          <div style="font-weight:850;font-size:19px">セッション完了</div>
-          <div class="summary-num" id="summaryAccuracy">—</div>
-          <div class="summary-sub" id="summaryText"></div>
-          <div style="display:grid;gap:9px;margin-top:20px">
-            <button class="primary" id="summaryWrongBtn">誤答を復習する</button>
-            <button class="secondary" id="summaryHomeBtn">ホームへ</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="view" id="mistakeView">
-      <div class="toolbar">
-        <input class="search" id="mistakeSearch" placeholder="単語・意味を検索">
-        <button class="secondary" id="reviewWrongBtn" style="min-height:44px;padding:9px 12px">誤答復習</button>
-      </div>
-      <div class="mistake-list" id="mistakeList"></div>
-    </section>
-
-    <section class="view" id="statsView">
-      <div class="stats-grid">
-        <div class="stat"><div class="v" id="sAttempts">0</div><div class="k">総回答</div></div>
-        <div class="stat"><div class="v" id="sAccuracy">—</div><div class="k">正答率</div></div>
-        <div class="stat"><div class="v" id="sDue">0</div><div class="k">今すぐ復習</div></div>
-        <div class="stat"><div class="v" id="sFluent">0</div><div class="k">1.5秒以内の即答語</div></div>
-      </div>
-
-      <div class="section-title">次回復習まで</div>
-      <div class="card bigcard" id="stageBars"></div>
-      <div class="stats-foot" id="statsFoot">315語それぞれの「次回復習予定」を1語1回だけ数えます。</div>
-
-      <div class="section-title">復習の仕組み</div>
-      <div class="card info">
-        <h2>英単語版と同じ考え方</h2>
-        <ul>
-          <li><b>全義の想起：</b>答えを見る前に、その語の登録された意味をすべて思い出す。</li>
-          <li><b>5秒判定：</b>5秒以内に「全部思い出せた」を押せなければ誤答。</li>
-          <li><b>軽量適応復習：</b>1.5秒以内の即答・5秒以内の正答・誤答で次回間隔を調整する。</li>
-          <li><b>初回から即答：</b>1.5秒以内の完全正答なら約4〜6日後。通常の正答はまず翌日。</li>
-          <li><b>誤答：</b>数問後に再テストし、翌日も確認する。</li>
-          <li><b>復習上限：</b>期限語が多すぎる日は、忘れやすさを推定して優先順位をつける。</li>
-        </ul>
-        <div class="notice"><b>注意：</b>「5秒が記憶に最適」という意味ではありません。このアプリでは「5秒以内に全義を取り出せるか」を流暢性の基準として使います。</div>
-      </div>
-
-      <div class="section-title">データ</div>
-      <div class="card settings-card">
-        <div class="row"><div class="label"><strong>学習履歴を書き出す</strong><span>JSONで端末に保存</span></div><button class="secondary" id="exportBtn">書き出し</button></div>
-        <div class="row"><div class="label"><strong>学習履歴をリセット</strong><span>単語データは残ります</span></div><button class="danger" id="resetBtn">リセット</button></div>
-      </div>
-    </section>
-  </main>
+<div class="wrap">
+ <header class="head"><div class="brand"><div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c-2.4-1.5-5.5-1.8-9-.9v14.4c3.5-.9 6.6-.6 9 .9 2.4-1.5 5.5-1.8 9-.9V4.1c-3.5-.9-6.6-.6-9 .9Z"/><path d="M12 5v14.4"/></svg></div><div><div class="brand-name">古文単語315</div><div class="brand-sub">1日5語から、記憶を育てる</div></div></div><div class="head-date" id="headDate"></div></header>
+ <main>
+ <section class="page active" id="homeView">
+  <div class="hero"><div class="kicker" id="heroDay">DAY 01 / 63</div><h1>少しずつ、<br>忘れにくい記憶へ。</h1><p>新しい単語は1日5語まで。思い出す練習と、日を空けた復習を組み合わせます。</p><div class="hero-bottom"><div><span class="big" id="heroLearned">0</span><span class="tiny"> / 315語　学習開始</span></div><span class="tiny" id="heroPercent">0% に着手</span></div><div class="hero-track"><div id="heroBar"></div></div></div>
+  <div class="section-head"><h2>今日の学習</h2><span class="sub" id="todayDate"></span></div>
+  <div class="white-card today-box"><div class="today-top"><div class="today-title" id="todayHeading">今日の5語</div><span class="small-chip" id="todayChip">学習準備OK</span></div><div class="pips" id="todayPips" aria-label="今日の新出進捗"></div><div class="menu-grid"><div class="menu-tile"><strong id="countNew">5</strong><span>新出の残り</span></div><div class="menu-tile warn"><strong id="countDue">0</strong><span>復習待ち</span></div><div class="menu-tile"><strong id="countPending">0</strong><span>覚え直し</span></div></div><button type="button" class="btn btn-primary btn-block" id="dailyStart">今日の学習を始める <span aria-hidden="true">→</span></button><div class="inline-actions"><button type="button" class="btn btn-light" id="reviewOnly">復習だけする</button><button type="button" class="btn btn-subtle" id="weakQuick">苦手を練習</button></div><p class="today-note" id="todayNote">休んでも先に進みません。前回の続きから取り組めます。</p><p class="quiet-warning" id="backlogNote" hidden></p></div>
+  <div class="section-head"><h2>覚えるまでの3ステップ</h2></div>
+  <div class="journey"><div class="white-card"><div class="step-ico">1</div><h3>意味を知る</h3><p>新出5語の意味を見て、最初に記憶する。</p></div><div class="white-card"><div class="step-ico">2</div><h3>思い出す</h3><p>答えを隠して2回確認。間違いは再出題。</p></div><div class="white-card"><div class="step-ico">3</div><h3>日を空けて復習</h3><p>翌日・数日後…と間隔を伸ばしていく。</p></div></div>
+ </section>
+ <section class="page" id="studyView">
+  <div id="activeStudy" hidden><div class="study-header"><span class="small-label" id="studyMode">今日の学習</span><span class="small-label" id="studyCount">1 / 15</span></div><div class="study-track"><div id="studyProgress" style="width:0%"></div></div><div class="white-card study-card"><div class="study-meta"><span id="studyPill" class="pill">新しい単語</span><span class="word-number" id="studyNo">No.001</span></div><div class="word-center"><div class="word-big" id="studyWord"></div><div class="word-question" id="studyQuestion"></div><div class="meaning-spot" id="meaningSpot" hidden><div class="meaning-tag" id="meaningTag">覚える意味</div><div class="meaning-big" id="studyMeaning"></div></div><div class="learn-tip" id="studyTip"></div></div><div class="time-row" id="timerRow" hidden><div class="time-top"><span>思い出すまで</span><span id="timerDisplay">5.0秒</span></div><div class="timer-track"><div id="timerFill"></div></div></div><div class="feedback-label" id="feedbackLabel" hidden></div><div class="study-actions" id="studyActions"></div></div><p class="study-footnote" id="studyFootnote"></p></div>
+  <div id="studyIdle" class="white-card empty">今日の学習を選ぶと、ここにカードが表示されます。<div style="margin-top:16px"><button class="btn btn-primary" id="idleStart">今日の学習を始める</button></div></div>
+  <div id="sessionResult" class="white-card result-card" hidden><div class="result-emblem">✓</div><h2>おつかれさま！</h2><div class="result-lede" id="resultLede">今日の学習が終わりました。</div><div class="result-grid"><div><b id="resultCorrect">0</b><span>正解</span></div><div><b id="resultWrong">0</b><span>間違い</span></div><div><b id="resultIntroduced">0</b><span>新しく着手</span></div></div><div class="result-info" id="resultInfo">復習は明日以降も続きます。</div><div class="result-actions"><button type="button" class="btn btn-primary btn-block" id="resultHome">ホームに戻る</button><button type="button" class="btn btn-light btn-block" id="resultWeak">苦手語を復習する</button></div></div>
+ </section>
+ <section class="page" id="weakView"><h1 class="page-title">苦手な単語</h1><p class="page-sub">間違えた単語や復習期限の単語を確認できます。意味を隠したまま自分で答えてみましょう。</p><div class="tool-row"><input class="input" id="weakSearch" type="search" placeholder="単語・意味・番号で検索" aria-label="単語検索"><button class="btn btn-light" id="weakStart" type="button">苦手テスト</button></div><div class="filter-row" id="weakFilters"><button class="filter active" data-filter="wrong" type="button">間違えた語</button><button class="filter" data-filter="due" type="button">復習待ち</button><button class="filter" data-filter="all" type="button">学習済み全部</button></div><div class="weak-list" id="weakList"></div></section>
+ <section class="page" id="statsView"><h1 class="page-title">学習レポート</h1><p class="page-sub">単語ごとの復習段階と、学習の積み重ねを見える化します。</p><div class="stats-grid"><div class="white-card stat-card"><div class="value" id="statSeen">0</div><div class="desc">学習を始めた語数 / 315</div></div><div class="white-card stat-card"><div class="value" id="statStable">0</div><div class="desc">定着段階に進んだ語数</div></div><div class="white-card stat-card"><div class="value" id="statStreak">0日</div><div class="desc">連続学習日数</div></div><div class="white-card stat-card"><div class="value" id="statAccuracy">—</div><div class="desc">累計正答率</div></div></div>
+  <div class="white-card block"><h2>現在の習熟段階</h2><p class="block-sub">同じ日に正解を重ねるだけでは「定着」にしません。別の日の復習で段階が進みます。</p><div id="stageChart"></div></div>
+  <div class="white-card block"><h2>50語ごとの進み具合</h2><p class="block-sub">薄い青 = 学習着手、緑 = 定着段階。315語すべてを7区間で表示します。</p><div id="bandChart"></div><div class="legend"><span><i style="background:#bed0fc"></i>着手</span><span><i style="background:var(--mint)"></i>定着段階</span></div></div>
+  <div class="white-card block"><h2>最近14日間の回答数</h2><p class="block-sub">新出語の紹介画面は含めず、実際に思い出すテストに答えた回数です。</p><div class="mini-chart" id="dailyChart"></div><div class="mini-axis"><span id="chartStart"></span><span id="chartEnd"></span></div></div>
+  <div class="white-card block"><h2>自分に合う設定</h2><div class="settings-form"><div class="setting"><div><h3>思い出す制限時間</h3><p>5秒・8秒・10秒。次のカードから適用。</p></div><select id="timerSetting" aria-label="制限時間"><option value="5">5秒</option><option value="8">8秒</option><option value="10">10秒</option></select></div><div class="setting"><div><h3>1日の復習出題上限</h3><p>「今日の学習」と「復習だけ」の合計。超過分は残ります。</p></div><select id="capSetting" aria-label="復習上限"><option value="10">10語</option><option value="20">20語</option><option value="30">30語</option><option value="0">上限なし</option></select></div></div><details class="details"><summary>復習間隔と判定ルール</summary><ul><li>新しい5語は意味を見たあと、答えを隠して2周チェックします。</li><li>初日の確認ができた語は翌日。以後の成功で2・4・7・14・30・60日と間隔を延ばします。</li><li>誤答時は復習段階を下げ、セッション中に再出題し、翌日にも復習します。</li><li>「定着段階」は目安です。完全に忘れないことを保証するものではありません。</li><li>収録された代表の意味1つを判定します。多義語の全義は対象外です。</li></ul></details></div>
+  <div class="white-card block"><h2>学習記録のバックアップ</h2><p class="block-sub">履歴はこのブラウザ内に保存されます。機種変更や別ブラウザ用にファイルへ書き出せます。</p><div class="file-actions"><button type="button" class="btn btn-light" id="exportBtn">履歴を書き出す</button><button type="button" class="btn btn-outline" id="importBtn">履歴を読み込む</button></div><input type="file" id="importFile" accept="application/json,.json" hidden><p class="tiny-note">旧HTML版と同じブラウザで開くと、旧版の履歴を引き継げる場合があります。取り込み前に現在の記録を保存してください。</p><div style="margin-top:18px"><button type="button" class="btn btn-danger-soft" id="resetBtn">学習記録をリセット</button></div></div>
+ </section>
+ </main>
 </div>
-
-<nav class="nav">
-  <button data-view="homeView" class="active"><span class="ico">⌂</span>ホーム</button>
-  <button data-view="studyView"><span class="ico">▶</span>学習</button>
-  <button data-view="mistakeView"><span class="ico">↺</span>誤答</button>
-  <button data-view="statsView"><span class="ico">▥</span>記録</button>
-</nav>
-<div class="toast" id="toast"></div>
-
+<nav class="bottom-nav" aria-label="メインメニュー"><button class="nav-item active" type="button" data-view="homeView"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-7h6v7"/></svg>ホーム</button><button class="nav-item" type="button" data-view="studyView"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8 6 4-6 4z"/></svg>学習</button><button class="nav-item" type="button" data-view="weakView"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6v6h-6"/><path d="M4 18v-6h6"/><path d="M5.5 9a7 7 0 0 1 12.2-2L20 12"/><path d="M4 12l2.3 5a7 7 0 0 0 12.2-2"/></svg>苦手</button><button class="nav-item" type="button" data-view="statsView"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-9M22 20V7"/><path d="M2 20h20"/></svg>記録</button></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 "use strict";
-
-const EMBEDDED_WORDS = [{"no":1,"word":"見る","meaning":"（男女の）関係を結ぶ／面倒を見る","section":1},{"no":2,"word":"見す","meaning":"結婚させる","section":1},{"no":3,"word":"見ゆ","meaning":"見える／思われる／見せる／女性が結婚する","section":1},{"no":4,"word":"かいまみる","meaning":"のぞき見る","section":1},{"no":5,"word":"よばふ（呼ばふ）","meaning":"呼びかける／求婚する","section":1},{"no":6,"word":"好く（すく）","meaning":"風流を好む／恋愛に熱中する","section":1},{"no":7,"word":"わたる（渡る）","meaning":"時が過ぎる／一面に～する／通り続ける","section":1},{"no":8,"word":"ありく","meaning":"出歩く／～して回る／～し続ける","section":1},{"no":9,"word":"おこなふ","meaning":"仏道修行をする","section":1},{"no":10,"word":"なやむ","meaning":"病気になる／苦しむ","section":1},{"no":11,"word":"おこたる","meaning":"病気が治る・回復する","section":1},{"no":12,"word":"おくる","meaning":"先立たれる／後に残る","section":1},{"no":13,"word":"ながむ","meaning":"物思いに沈む／和歌を口ずさむ","section":1},{"no":14,"word":"ときめく","meaning":"寵愛を受ける／栄える","section":1},{"no":15,"word":"かしづく","meaning":"大切に育てる・世話をする","section":1},{"no":16,"word":"めづ（愛づ）","meaning":"気に入る／感心する／ほめる","section":1},{"no":17,"word":"おどろく","meaning":"目を覚ます／気づく","section":1},{"no":18,"word":"こうず","meaning":"疲れる／困る","section":1},{"no":19,"word":"おぼゆ","meaning":"思われる／思い出される／似る","section":1},{"no":20,"word":"聞こゆ","meaning":"聞こえる／評判になる／分かる","section":1},{"no":21,"word":"まもる（守る）","meaning":"見つめる／監視する","section":1},{"no":22,"word":"たのむ","meaning":"あてにする／あてにさせる","section":1},{"no":23,"word":"かづく","meaning":"かぶる／褒美をいただく・与える","section":1},{"no":24,"word":"らうがはし","meaning":"騒がしい／乱雑だ","section":1},{"no":25,"word":"やる（遣る）","meaning":"送る／気持ちを晴らす","section":1},{"no":26,"word":"いらふ","meaning":"答える","section":1},{"no":27,"word":"あきらむ","meaning":"明らかにする","section":1},{"no":28,"word":"にほふ","meaning":"美しく映える／香る","section":1},{"no":29,"word":"ねんず","meaning":"我慢する／祈る","section":1},{"no":30,"word":"まうく（設く）","meaning":"用意する","section":1},{"no":31,"word":"ゐる（居る・率る）","meaning":"座る・～ている／連れる","section":1},{"no":32,"word":"具す（ぐす）","meaning":"連れる／伴う","section":1},{"no":33,"word":"経（ふ）","meaning":"時間がたつ／場所を通る","section":1},{"no":34,"word":"さる","meaning":"避ける／（時節が）来る","section":1},{"no":35,"word":"ものし","meaning":"不快だ／見苦しい","section":1},{"no":36,"word":"ならふ","meaning":"慣れる／親しくなる","section":1},{"no":37,"word":"しのぶ","meaning":"我慢する／人目を避ける／思い出す","section":1},{"no":38,"word":"わぶ（侘ぶ）","meaning":"困る／嘆く／～かねる","section":1},{"no":39,"word":"をかし","meaning":"すばらしい／趣がある・おもしろい","section":1},{"no":40,"word":"わろし","meaning":"よくない","section":1},{"no":41,"word":"ありがたし","meaning":"めったにない／すばらしい","section":1},{"no":42,"word":"つきづきし","meaning":"似つかわしい／ふさわしい","section":1},{"no":43,"word":"なまめかし","meaning":"優美だ／若々しい","section":1},{"no":44,"word":"めでたし","meaning":"すばらしい","section":1},{"no":45,"word":"うるはし","meaning":"端正だ／きちんとしている","section":1},{"no":46,"word":"やむごとなし","meaning":"高貴だ／並々でない","section":1},{"no":47,"word":"おとなし","meaning":"大人びている／思慮分別がある","section":1},{"no":48,"word":"ゆかし","meaning":"見たい・聞きたい・知りたい／心ひかれる","section":1},{"no":49,"word":"なつかし","meaning":"親しみ深い／心ひかれる","section":1},{"no":50,"word":"はづかし","meaning":"立派だ／こちらが気後れするほど優れている","section":1},{"no":51,"word":"こころにくし","meaning":"奥ゆかしい／上品だ","section":1},{"no":52,"word":"うつくし","meaning":"かわいらしい／いとしい","section":1},{"no":53,"word":"かなし","meaning":"かわいい／いとしい","section":1},{"no":54,"word":"らうたげなり","meaning":"かわいらしい","section":1},{"no":55,"word":"めやすし（目安し）","meaning":"見た目の感じがよい","section":1},{"no":56,"word":"あやし","meaning":"不思議だ／身分が低い・粗末だ","section":1},{"no":57,"word":"さうざうし","meaning":"物足りない／さびしい","section":1},{"no":58,"word":"つれなし","meaning":"平然としている／冷淡だ","section":1},{"no":59,"word":"なめし","meaning":"無礼だ","section":1},{"no":60,"word":"おどろおどろし","meaning":"大げさだ／気味が悪い","section":1},{"no":61,"word":"うし","meaning":"つらい／いやだ","section":1},{"no":62,"word":"むつかし","meaning":"うっとうしい／気味が悪い","section":1},{"no":63,"word":"すさまじ","meaning":"興ざめだ／殺風景だ","section":1},{"no":64,"word":"びんなし（便無し）","meaning":"不都合だ／気の毒だ","section":1},{"no":65,"word":"いとほし","meaning":"気の毒だ／かわいそうだ","section":1},{"no":66,"word":"いはけなし","meaning":"幼い","section":1},{"no":67,"word":"つらし","meaning":"薄情だ／つらい","section":1},{"no":68,"word":"ところせし","meaning":"窮屈だ／気詰まりだ","section":1},{"no":69,"word":"うしろめたし","meaning":"気がかりだ","section":1},{"no":70,"word":"かたはらいたし","meaning":"きまりが悪い／気の毒だ／苦々しい","section":1},{"no":71,"word":"わりなし","meaning":"道理に合わない・ひどい・無理やりだ／しかたがない・どうしようもない／苦しい・つらい・困っている","section":1},{"no":72,"word":"本意なし（ほいなし）","meaning":"残念だ","section":1},{"no":73,"word":"あさまし","meaning":"驚くほどだ／あきれる／情けない","section":1},{"no":74,"word":"めざまし","meaning":"気にくわない／すばらしい","section":1},{"no":75,"word":"いみじ","meaning":"すばらしい／ひどい／たいそう","section":1},{"no":76,"word":"ゆゆし","meaning":"不吉だ／すばらしい／はなはだしい","section":1},{"no":77,"word":"やさし（恥し・優し）","meaning":"優美だ／上品だ／殊勝だ","section":1},{"no":78,"word":"しるし","meaning":"はっきりしている／そのとおりだ","section":1},{"no":79,"word":"とし","meaning":"速い","section":1},{"no":80,"word":"ゆくりなし","meaning":"突然だ","section":1},{"no":81,"word":"おぼつかなし","meaning":"はっきりしない／気がかりだ","section":1},{"no":82,"word":"こころもとなし","meaning":"不安だ／待ち遠しい／じれったい","section":1},{"no":83,"word":"あはれなり","meaning":"しみじみと心に感じる／趣深い","section":1},{"no":84,"word":"つれづれなり","meaning":"退屈だ／もの寂しい","section":1},{"no":85,"word":"すずろなり・そぞろなり","meaning":"なんとなく／思いがけない／むやみだ","section":1},{"no":86,"word":"まめなり","meaning":"まじめだ／実用的だ","section":1},{"no":87,"word":"あだなり","meaning":"はかない／浮気だ","section":1},{"no":88,"word":"いたづらなり","meaning":"役に立たない／むなしい","section":1},{"no":89,"word":"いうなり","meaning":"優れている／優雅だ","section":1},{"no":90,"word":"あてなり","meaning":"高貴だ／上品だ","section":1},{"no":91,"word":"あからさまなり","meaning":"ほんの少し／ちょっと","section":1},{"no":92,"word":"みそかなり（密かなり）","meaning":"ひそかだ","section":1},{"no":93,"word":"おろかなり","meaning":"いい加減だ／並ひととおりだ／言い尽くせない","section":1},{"no":94,"word":"をこがまし","meaning":"ばかばかしい／愚かだ","section":1},{"no":95,"word":"むげなり（無下なり）","meaning":"ひどい／むやみだ","section":1},{"no":96,"word":"なかなかなり","meaning":"中途半端だ／かえって～ないほうがよい","section":1},{"no":97,"word":"手（て）","meaning":"文字／筆跡／演奏法","section":1},{"no":98,"word":"文・書（ふみ）","meaning":"手紙／漢詩・漢文・漢字・漢籍（漢文の書物）","section":1},{"no":99,"word":"消息（せうそこ）","meaning":"手紙／訪問の申し入れ","section":1},{"no":100,"word":"あそび","meaning":"管弦の遊び","section":1},{"no":101,"word":"うへ","meaning":"帝／貴人の奥方","section":2},{"no":102,"word":"おほやけ","meaning":"朝廷／帝","section":2},{"no":103,"word":"うち","meaning":"宮中／帝","section":2},{"no":104,"word":"御前","meaning":"貴人の前／貴人","section":2},{"no":105,"word":"みゆき（行幸・御幸）","meaning":"帝や上皇のお出まし","section":2},{"no":106,"word":"たより","meaning":"頼り／つて／よい機会","section":2},{"no":107,"word":"物語","meaning":"世間話","section":2},{"no":108,"word":"ためし","meaning":"先例／例","section":2},{"no":109,"word":"いそぎ","meaning":"準備","section":2},{"no":110,"word":"用意","meaning":"心づかい／教養・身分にふさわしい心構え","section":2},{"no":111,"word":"かたち","meaning":"顔立ち／容貌","section":2},{"no":112,"word":"かげ","meaning":"光／姿","section":2},{"no":113,"word":"けしき","meaning":"様子／気配／意向","section":2},{"no":114,"word":"こころざし","meaning":"愛情／好意／贈り物","section":2},{"no":115,"word":"ほい（本意）","meaning":"かねてからの願い","section":2},{"no":116,"word":"こと","meaning":"言葉／和歌","section":2},{"no":117,"word":"わざ（業）","meaning":"こと／葬儀","section":2},{"no":118,"word":"よろづ方","meaning":"さまざま／何ごとにつけても","section":2},{"no":119,"word":"ことわり","meaning":"道理／当然のこと","section":2},{"no":120,"word":"ひがごと（僻事）","meaning":"間違い","section":2},{"no":121,"word":"そらごと","meaning":"うそ","section":2},{"no":122,"word":"しるし","meaning":"効き目／ご利益／兆し","section":2},{"no":123,"word":"料（れう）","meaning":"ため","section":2},{"no":124,"word":"禄（ろく）","meaning":"ほうび","section":2},{"no":125,"word":"としごろ","meaning":"長年","section":2},{"no":126,"word":"つとめて","meaning":"早朝／翌朝","section":2},{"no":127,"word":"世・世の中","meaning":"男女の仲／夫婦の仲","section":2},{"no":128,"word":"いかで・いかでか","meaning":"どうして／どうにかして","section":2},{"no":129,"word":"いかが・いかに","meaning":"どのように／どうして／どれほど","section":2},{"no":130,"word":"など・などか・などて・なじかは","meaning":"どうして／なぜ","section":2},{"no":131,"word":"いつしか","meaning":"いつの間にか／早く～したい","section":2},{"no":132,"word":"おのづから","meaning":"自然に／たまたま／万一","section":2},{"no":133,"word":"なほ","meaning":"やはり／さらに／何といっても","section":2},{"no":134,"word":"いとど","meaning":"ますます","section":2},{"no":135,"word":"げに","meaning":"なるほど／本当に","section":2},{"no":136,"word":"かく","meaning":"このように","section":2},{"no":137,"word":"さ","meaning":"そう／そのように","section":2},{"no":138,"word":"しか","meaning":"そう／そのように","section":2},{"no":139,"word":"と","meaning":"そのように","section":2},{"no":140,"word":"やがて","meaning":"その状態のまま／すぐに","section":2},{"no":141,"word":"すなはち","meaning":"すぐに／その時に","section":2},{"no":142,"word":"やうやう・やうやく（漸う・漸く）","meaning":"しだいに","section":2},{"no":143,"word":"やをら・やはら","meaning":"そっと","section":2},{"no":144,"word":"なかなか（に）","meaning":"かえって／むしろ","section":2},{"no":145,"word":"さすがに","meaning":"そうはいってもやはり","section":2},{"no":146,"word":"かたみに","meaning":"互いに","section":2},{"no":147,"word":"うたて","meaning":"いやなことに／異様に","section":2},{"no":148,"word":"なべて","meaning":"一般に／並ひととおり","section":2},{"no":149,"word":"わざと","meaning":"わざわざ／特に／正式に","section":2},{"no":150,"word":"あまた","meaning":"たくさん","section":2},{"no":151,"word":"ここら・そこら","meaning":"たくさん","section":2},{"no":152,"word":"え～打消","meaning":"～できない","section":2},{"no":153,"word":"な～そ","meaning":"～するな","section":2},{"no":154,"word":"おほかた～打消","meaning":"まったく～ない","section":2},{"no":155,"word":"さらに～打消","meaning":"まったく～ない","section":2},{"no":156,"word":"世に～打消","meaning":"まったく～ない／実に","section":2},{"no":157,"word":"たえて～打消","meaning":"まったく～ない","section":2},{"no":158,"word":"つゆ～打消","meaning":"少しも～ない","section":2},{"no":159,"word":"ゆめ～打消・禁止","meaning":"決して～ない／決して～するな","section":2},{"no":160,"word":"つやつや～打消","meaning":"まったく～ない","section":2},{"no":161,"word":"をさをさ～打消","meaning":"ほとんど～ない","section":2},{"no":162,"word":"よも～打消推量","meaning":"まさか～ないだろう","section":2},{"no":163,"word":"あなかしこ～禁止","meaning":"決して～するな","section":2},{"no":164,"word":"ためらふ","meaning":"気持ちを静める／ためらう","section":2},{"no":165,"word":"やすらふ（休らふ）","meaning":"ためらう／立ち止まる","section":2},{"no":166,"word":"かたらふ","meaning":"語り合う／親しく交際する／男女が契る","section":2},{"no":167,"word":"住む（すむ）","meaning":"女のもとに通う","section":2},{"no":168,"word":"やむ（止む）","meaning":"そのまま終わる","section":2},{"no":169,"word":"うつろふ","meaning":"色あせる／移る","section":2},{"no":170,"word":"みいだす（見出だす）","meaning":"外を見る／見つけ出す","section":2},{"no":171,"word":"もてなす","meaning":"振る舞う／取り扱う","section":2},{"no":172,"word":"あつかふ","meaning":"面倒を見る／もてあます","section":2},{"no":173,"word":"あくがる","meaning":"魂が抜けてさまよう／浮かれ出る","section":2},{"no":174,"word":"あふ","meaning":"結婚する","section":2},{"no":175,"word":"しほたる","meaning":"涙で袖をぬらす／泣く","section":2},{"no":176,"word":"かきくらす","meaning":"悲しみで目の前が暗くなる／泣き暮らす","section":2},{"no":177,"word":"まどふ（惑ふ）","meaning":"迷う／ひどく～する","section":2},{"no":178,"word":"たばかる","meaning":"工夫する／だます","section":2},{"no":179,"word":"すさぶ","meaning":"気の向くままにする／興じる","section":2},{"no":180,"word":"すまふ","meaning":"抵抗する／断る","section":2},{"no":181,"word":"まねぶ（学ぶ）","meaning":"まねる／見聞したことをそのまま伝える","section":2},{"no":182,"word":"ねぶ","meaning":"年を取る／大人びる","section":2},{"no":183,"word":"おきつ","meaning":"決めておく／指図する","section":2},{"no":184,"word":"うれふ","meaning":"訴える／嘆く","section":2},{"no":185,"word":"むすぶ（結ぶ・掬ぶ）","meaning":"結ぶ／両手で水などをすくう","section":2},{"no":186,"word":"とぶらふ","meaning":"訪ねる／見舞う／弔う","section":2},{"no":187,"word":"やつす","meaning":"質素な姿になる／出家する","section":2},{"no":188,"word":"さはる","meaning":"差し支える／妨げられる","section":2},{"no":189,"word":"かしこまる","meaning":"恐縮する／承知する","section":2},{"no":190,"word":"かこつ","meaning":"嘆く／他のせいにする","section":2},{"no":191,"word":"わく（分く）","meaning":"理解する／区別する","section":2},{"no":192,"word":"つつむ","meaning":"遠慮する／隠す","section":2},{"no":193,"word":"あらまほし","meaning":"望ましい／理想的だ","section":2},{"no":194,"word":"らうらうじ","meaning":"巧みだ／上品だ","section":2},{"no":195,"word":"うるせし","meaning":"賢い／巧みだ","section":2},{"no":196,"word":"はかばかし","meaning":"しっかりしている／はっきりしている","section":2},{"no":197,"word":"をさをさし（長長し）","meaning":"しっかりしている","section":2},{"no":198,"word":"さうなし","meaning":"並ぶものがない／たぐいない","section":2},{"no":199,"word":"くまなし","meaning":"曇りがない／隅々まで明るい","section":2},{"no":200,"word":"ずちなし","meaning":"どうしようもない／手段がない","section":2},{"no":201,"word":"またなし","meaning":"またとない／比類がない","section":3},{"no":202,"word":"あいなし","meaning":"つまらない／なんとなく","section":3},{"no":203,"word":"はかなし","meaning":"頼りない／ちょっとしたことだ","section":3},{"no":204,"word":"こころづきなし","meaning":"気にくわない／不快だ","section":3},{"no":205,"word":"あへなし","meaning":"あっけない／張り合いがない","section":3},{"no":206,"word":"よしなし（由無し）","meaning":"つまらない／関係がない","section":3},{"no":207,"word":"おほけなし","meaning":"身の程知らずだ／恐れ多い","section":3},{"no":208,"word":"さがなし","meaning":"意地が悪い／性質が悪い","section":3},{"no":209,"word":"はしたなし","meaning":"いたたまれない／きまりが悪い","section":3},{"no":210,"word":"しどけなし","meaning":"だらしない／無造作だ","section":3},{"no":211,"word":"いぎたなし","meaning":"寝坊だ／眠りが深い","section":3},{"no":212,"word":"ひとわろし（人悪し）","meaning":"みっともない","section":3},{"no":213,"word":"いぶせし","meaning":"気が晴れない／うっとうしい","section":3},{"no":214,"word":"くちをし","meaning":"残念だ／情けない","section":3},{"no":215,"word":"あたらし","meaning":"惜しい／もったいない","section":3},{"no":216,"word":"ねたし","meaning":"しゃくだ／腹立たしい","section":3},{"no":217,"word":"こちたし","meaning":"大げさだ／わずらわしい","section":3},{"no":218,"word":"けし","meaning":"異様だ／悪い","section":3},{"no":219,"word":"わびし（侘びし）","meaning":"つらい／悲しい","section":3},{"no":220,"word":"こころぐるし","meaning":"気の毒だ／心配だ","section":3},{"no":221,"word":"またし（全し）","meaning":"完全だ","section":3},{"no":222,"word":"さかし","meaning":"賢い／利口ぶっている","section":3},{"no":223,"word":"まばゆし","meaning":"まぶしい／恥ずかしい／見ていられない","section":3},{"no":224,"word":"かたじけなし","meaning":"恐れ多い／ありがたい","section":3},{"no":225,"word":"かしこし","meaning":"恐れ多い／すばらしい","section":3},{"no":226,"word":"しげし","meaning":"多い／頻繁だ","section":3},{"no":227,"word":"すごし","meaning":"もの寂しい／ぞっとするほどすばらしい","section":3},{"no":228,"word":"いたし","meaning":"ひどい／すばらしい／非常に","section":3},{"no":229,"word":"おぼろけなり","meaning":"並ひととおりだ／ありふれている","section":3},{"no":230,"word":"なのめなり","meaning":"いい加減だ／並ひととおりだ","section":3},{"no":231,"word":"清らなり・けうらなり","meaning":"清らかで美しい","section":3},{"no":232,"word":"まほなり","meaning":"完全である","section":3},{"no":233,"word":"あらはなり","meaning":"丸見えだ／明白だ","section":3},{"no":234,"word":"あながちなり","meaning":"強引だ／むやみだ","section":3},{"no":235,"word":"せちなり","meaning":"切実だ／ひたすらだ","section":3},{"no":236,"word":"とみなり","meaning":"急だ／にわかだ","section":3},{"no":237,"word":"うちつけなり","meaning":"突然だ／軽率だ","section":3},{"no":238,"word":"さらなり","meaning":"言うまでもない","section":3},{"no":239,"word":"ねんごろなり・ねむごろなり","meaning":"親切だ／熱心だ／親密だ","section":3},{"no":240,"word":"おいらかなり","meaning":"おだやかだ／おっとりしている","section":3},{"no":241,"word":"あやにくなり","meaning":"意地が悪い／あいにくだ","section":3},{"no":242,"word":"おぼえ","meaning":"評判／寵愛","section":3},{"no":243,"word":"ひま（隙・暇）","meaning":"すき間／合間","section":3},{"no":244,"word":"いとま","meaning":"暇／休むこと","section":3},{"no":245,"word":"才（ざえ）","meaning":"漢学の教養／才能","section":3},{"no":246,"word":"よろこび（喜び）","meaning":"褒美／任官のお礼","section":3},{"no":247,"word":"こころばへ","meaning":"気立て／心遣い／趣","section":3},{"no":248,"word":"こころづくし","meaning":"物思いをすること","section":3},{"no":249,"word":"そこ","meaning":"あなた／そこ","section":3},{"no":250,"word":"ここ","meaning":"私／ここ","section":3},{"no":251,"word":"かれ","meaning":"あの人／あれ","section":3},{"no":252,"word":"それ","meaning":"その人／あなた","section":3},{"no":253,"word":"これ","meaning":"この人／私","section":3},{"no":254,"word":"あなた","meaning":"向こう","section":3},{"no":255,"word":"そなた","meaning":"そちら／あなた","section":3},{"no":256,"word":"こなた","meaning":"こちら／私","section":3},{"no":257,"word":"そのかみ","meaning":"その当時","section":3},{"no":258,"word":"せうと","meaning":"兄","section":3},{"no":259,"word":"おとうと・おとと","meaning":"弟／妹","section":3},{"no":260,"word":"いも","meaning":"愛しい女性／妻・姉妹","section":3},{"no":261,"word":"つま","meaning":"夫／妻","section":3},{"no":262,"word":"はらから（同胞）","meaning":"兄弟","section":3},{"no":263,"word":"かたへ","meaning":"片方／仲間","section":3},{"no":264,"word":"ほど（程）","meaning":"ころ／広さ／身分／様子","section":3},{"no":265,"word":"かぎり","meaning":"限界／全部／臨終","section":3},{"no":266,"word":"きは","meaning":"身分／程度／際","section":3},{"no":267,"word":"ついで","meaning":"順序／機会","section":3},{"no":268,"word":"沙汰（さた）","meaning":"評議・裁き／命令／うわさ","section":3},{"no":269,"word":"とが","meaning":"罪／欠点","section":3},{"no":270,"word":"け","meaning":"ため／せい","section":3},{"no":271,"word":"よし（由）","meaning":"風情／由緒／手立て／こと","section":3},{"no":272,"word":"やう（様）","meaning":"様子／理由／方法／～ことには","section":3},{"no":273,"word":"ちぎり","meaning":"約束／宿縁","section":3},{"no":274,"word":"ほだし（絆）","meaning":"束縛となるもの","section":3},{"no":275,"word":"あやめ","meaning":"道理／区別","section":3},{"no":276,"word":"うつつ","meaning":"現実／正気","section":3},{"no":277,"word":"あるじ","meaning":"主人／もてなし","section":3},{"no":278,"word":"ふるさと（古里・故郷）","meaning":"なじみの土地／故郷","section":3},{"no":279,"word":"さて","meaning":"そのまま／そのほか","section":3},{"no":280,"word":"さながら","meaning":"そのまま／すべて","section":3},{"no":281,"word":"いま","meaning":"すぐに／もう","section":3},{"no":282,"word":"せめて","meaning":"無理に／強いて／ひどく","section":3},{"no":283,"word":"むべ（宜）","meaning":"なるほど","section":3},{"no":284,"word":"かつ","meaning":"一方では／すぐに","section":3},{"no":285,"word":"ひねもす（終日）","meaning":"一日中","section":3},{"no":286,"word":"かまへて～打消・禁止","meaning":"決して～ない／なんとかして","section":3},{"no":287,"word":"あへて～打消","meaning":"まったく～ない","section":3},{"no":288,"word":"かけて（も）～打消","meaning":"まったく／決して～ない","section":3},{"no":289,"word":"さだめて～推量","meaning":"きっと～だろう","section":3},{"no":290,"word":"のたまふ・のたまはす","meaning":"おっしゃる（「言ふ」の尊敬語）","section":3},{"no":291,"word":"仰す（おほす）","meaning":"おっしゃる","section":3},{"no":292,"word":"聞こゆ・聞こえさす","meaning":"申し上げる／～申し上げる","section":3},{"no":293,"word":"申す","meaning":"申し上げる","section":3},{"no":294,"word":"奏す","meaning":"（天皇に）申し上げる","section":3},{"no":295,"word":"啓す","meaning":"（皇后・中宮などに）申し上げる","section":3},{"no":296,"word":"承る","meaning":"お受けする／お聞きする","section":3},{"no":297,"word":"給ふ","meaning":"お与えになる／くださる／～なさる／～ます","section":3},{"no":298,"word":"たまはす","meaning":"お与えになる","section":3},{"no":299,"word":"たまはる","meaning":"いただく","section":3},{"no":300,"word":"召す","meaning":"お召しになる／お呼びになる／召し上がる","section":3},{"no":301,"word":"思す・思し召す","meaning":"お思いになる","section":4},{"no":302,"word":"おほとのごもる","meaning":"おやすみになる","section":4},{"no":303,"word":"さぶらふ・さうらふ","meaning":"お仕え申し上げる／あります／～でございます","section":4},{"no":304,"word":"はべり（侍り）","meaning":"お仕え申し上げる／あります・ございます","section":4},{"no":305,"word":"奉る","meaning":"差し上げる／お召しになる・召し上がる・お乗りになる","section":4},{"no":306,"word":"参らす","meaning":"差し上げる／～申し上げる","section":4},{"no":307,"word":"まゐる（参る）","meaning":"参上する／差し上げる","section":4},{"no":308,"word":"まかる・まかづ（罷る・罷づ）","meaning":"退出する／退出申し上げる","section":4},{"no":309,"word":"あそばす","meaning":"なさる","section":4},{"no":310,"word":"つかうまつる","meaning":"お仕え申し上げる／～申し上げる","section":4},{"no":311,"word":"聞こし召す","meaning":"お聞きになる／召し上がる","section":4},{"no":312,"word":"しろしめす","meaning":"ご存じである／お治めになる","section":4},{"no":313,"word":"おはす・おはします","meaning":"いらっしゃる／～ていらっしゃる","section":4},{"no":314,"word":"います・ます・まします・いますかり","meaning":"いらっしゃる／～ていらっしゃる","section":4},{"no":315,"word":"御覧ず","meaning":"ご覧になる","section":4}];
-
-const K = {
-  state:"kobun315_state_v1",
-  settings:"kobun315_settings_v1",
-  daily:"kobun315_daily_v1",
-  plan:"kobun315_plan_v1"
-};
-const DAY = 24*60*60*1000;
-const LIMIT_MS = 5000;
-const FAST_MS = 1500;
-const SCHEDULER_VERSION = 1;
-
-let WORDS = EMBEDDED_WORDS;
-let STATE = loadJSON(K.state, {});
-let SETTINGS = Object.assign({start:1,end:315,size:20,reviewCap:30}, loadJSON(K.settings, {}));
-let DAILY = loadJSON(K.daily, {});
-let PLAN = Object.assign({startDate:todayKey(),dailyNew:20}, loadJSON(K.plan, {}));
-let sessionQueue=[], currentIndex=0, sessionCorrect=0, sessionWrong=0, sessionAnswered=0;
-let retryCount={};
-let currentWord=null, currentPromptStart=0, timerDeadline=0, timerRemaining=LIMIT_MS, timerRAF=0, timerRunning=false, promptResolved=false;
-
-const $ = id => document.getElementById(id);
-function loadJSON(k,fallback){ try{const v=localStorage.getItem(k); return v?JSON.parse(v):fallback}catch(e){return fallback} }
-function saveJSON(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
-function todayKey(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
-function toast(msg){
-  const t=$("toast"); t.textContent=msg; t.classList.add("show");
-  clearTimeout(t._x); t._x=setTimeout(()=>t.classList.remove("show"),1800);
+const WORDS = [{"no":1,"word":"見る","meaning":"（男女の）関係を結ぶ","section":1},{"no":2,"word":"見す","meaning":"結婚させる","section":1},{"no":3,"word":"見ゆ","meaning":"見える","section":1},{"no":4,"word":"かいまみる","meaning":"のぞき見る","section":1},{"no":5,"word":"よばふ（呼ばふ）","meaning":"呼びかける","section":1},{"no":6,"word":"好く（すく）","meaning":"風流を好む","section":1},{"no":7,"word":"わたる（渡る）","meaning":"時が過ぎる","section":1},{"no":8,"word":"ありく","meaning":"出歩く","section":1},{"no":9,"word":"おこなふ","meaning":"仏道修行をする","section":1},{"no":10,"word":"なやむ","meaning":"病気になる","section":1},{"no":11,"word":"おこたる","meaning":"病気が治る・回復する","section":1},{"no":12,"word":"おくる","meaning":"先立たれる","section":1},{"no":13,"word":"ながむ","meaning":"物思いに沈む","section":1},{"no":14,"word":"ときめく","meaning":"寵愛を受ける","section":1},{"no":15,"word":"かしづく","meaning":"大切に育てる・世話をする","section":1},{"no":16,"word":"めづ（愛づ）","meaning":"気に入る","section":1},{"no":17,"word":"おどろく","meaning":"目を覚ます","section":1},{"no":18,"word":"こうず","meaning":"疲れる","section":1},{"no":19,"word":"おぼゆ","meaning":"思われる","section":1},{"no":20,"word":"聞こゆ","meaning":"聞こえる","section":1},{"no":21,"word":"まもる（守る）","meaning":"見つめる","section":1},{"no":22,"word":"たのむ","meaning":"あてにする","section":1},{"no":23,"word":"かづく","meaning":"かぶる","section":1},{"no":24,"word":"らうがはし","meaning":"騒がしい","section":1},{"no":25,"word":"やる（遣る）","meaning":"送る","section":1},{"no":26,"word":"いらふ","meaning":"答える","section":1},{"no":27,"word":"あきらむ","meaning":"明らかにする","section":1},{"no":28,"word":"にほふ","meaning":"美しく映える","section":1},{"no":29,"word":"ねんず","meaning":"我慢する","section":1},{"no":30,"word":"まうく（設く）","meaning":"用意する","section":1},{"no":31,"word":"ゐる（居る・率る）","meaning":"座る・～ている","section":1},{"no":32,"word":"具す（ぐす）","meaning":"連れる","section":1},{"no":33,"word":"経（ふ）","meaning":"時間がたつ","section":1},{"no":34,"word":"さる","meaning":"避ける","section":1},{"no":35,"word":"ものし","meaning":"不快だ","section":1},{"no":36,"word":"ならふ","meaning":"慣れる","section":1},{"no":37,"word":"しのぶ","meaning":"我慢する","section":1},{"no":38,"word":"わぶ（侘ぶ）","meaning":"困る","section":1},{"no":39,"word":"をかし","meaning":"すばらしい","section":1},{"no":40,"word":"わろし","meaning":"よくない","section":1},{"no":41,"word":"ありがたし","meaning":"めったにない","section":1},{"no":42,"word":"つきづきし","meaning":"似つかわしい","section":1},{"no":43,"word":"なまめかし","meaning":"優美だ","section":1},{"no":44,"word":"めでたし","meaning":"すばらしい","section":1},{"no":45,"word":"うるはし","meaning":"端正だ","section":1},{"no":46,"word":"やむごとなし","meaning":"高貴だ","section":1},{"no":47,"word":"おとなし","meaning":"大人びている","section":1},{"no":48,"word":"ゆかし","meaning":"見たい・聞きたい・知りたい","section":1},{"no":49,"word":"なつかし","meaning":"親しみ深い","section":1},{"no":50,"word":"はづかし","meaning":"立派だ","section":1},{"no":51,"word":"こころにくし","meaning":"奥ゆかしい","section":1},{"no":52,"word":"うつくし","meaning":"かわいらしい","section":1},{"no":53,"word":"かなし","meaning":"かわいい","section":1},{"no":54,"word":"らうたげなり","meaning":"かわいらしい","section":1},{"no":55,"word":"めやすし（目安し）","meaning":"見た目の感じがよい","section":1},{"no":56,"word":"あやし","meaning":"不思議だ","section":1},{"no":57,"word":"さうざうし","meaning":"物足りない","section":1},{"no":58,"word":"つれなし","meaning":"平然としている","section":1},{"no":59,"word":"なめし","meaning":"無礼だ","section":1},{"no":60,"word":"おどろおどろし","meaning":"大げさだ","section":1},{"no":61,"word":"うし","meaning":"つらい","section":1},{"no":62,"word":"むつかし","meaning":"うっとうしい","section":1},{"no":63,"word":"すさまじ","meaning":"興ざめだ","section":1},{"no":64,"word":"びんなし（便無し）","meaning":"不都合だ","section":1},{"no":65,"word":"いとほし","meaning":"気の毒だ","section":1},{"no":66,"word":"いはけなし","meaning":"幼い","section":1},{"no":67,"word":"つらし","meaning":"薄情だ","section":1},{"no":68,"word":"ところせし","meaning":"窮屈だ","section":1},{"no":69,"word":"うしろめたし","meaning":"気がかりだ","section":1},{"no":70,"word":"かたはらいたし","meaning":"きまりが悪い","section":1},{"no":71,"word":"わりなし","meaning":"道理に合わない・ひどい・無理やりだ","section":1},{"no":72,"word":"本意なし（ほいなし）","meaning":"残念だ","section":1},{"no":73,"word":"あさまし","meaning":"驚くほどだ","section":1},{"no":74,"word":"めざまし","meaning":"気にくわない","section":1},{"no":75,"word":"いみじ","meaning":"すばらしい","section":1},{"no":76,"word":"ゆゆし","meaning":"不吉だ","section":1},{"no":77,"word":"やさし（恥し・優し）","meaning":"優美だ","section":1},{"no":78,"word":"しるし","meaning":"はっきりしている","section":1},{"no":79,"word":"とし","meaning":"速い","section":1},{"no":80,"word":"ゆくりなし","meaning":"突然だ","section":1},{"no":81,"word":"おぼつかなし","meaning":"はっきりしない","section":1},{"no":82,"word":"こころもとなし","meaning":"不安だ","section":1},{"no":83,"word":"あはれなり","meaning":"しみじみと心に感じる","section":1},{"no":84,"word":"つれづれなり","meaning":"退屈だ","section":1},{"no":85,"word":"すずろなり・そぞろなり","meaning":"なんとなく","section":1},{"no":86,"word":"まめなり","meaning":"まじめだ","section":1},{"no":87,"word":"あだなり","meaning":"はかない","section":1},{"no":88,"word":"いたづらなり","meaning":"役に立たない","section":1},{"no":89,"word":"いうなり","meaning":"優れている","section":1},{"no":90,"word":"あてなり","meaning":"高貴だ","section":1},{"no":91,"word":"あからさまなり","meaning":"ほんの少し","section":1},{"no":92,"word":"みそかなり（密かなり）","meaning":"ひそかだ","section":1},{"no":93,"word":"おろかなり","meaning":"いい加減だ","section":1},{"no":94,"word":"をこがまし","meaning":"ばかばかしい","section":1},{"no":95,"word":"むげなり（無下なり）","meaning":"ひどい","section":1},{"no":96,"word":"なかなかなり","meaning":"中途半端だ","section":1},{"no":97,"word":"手（て）","meaning":"文字","section":1},{"no":98,"word":"文・書（ふみ）","meaning":"手紙","section":1},{"no":99,"word":"消息（せうそこ）","meaning":"手紙","section":1},{"no":100,"word":"あそび","meaning":"管弦の遊び","section":1},{"no":101,"word":"うへ","meaning":"帝","section":2},{"no":102,"word":"おほやけ","meaning":"朝廷","section":2},{"no":103,"word":"うち","meaning":"宮中","section":2},{"no":104,"word":"御前","meaning":"貴人の前","section":2},{"no":105,"word":"みゆき（行幸・御幸）","meaning":"帝や上皇のお出まし","section":2},{"no":106,"word":"たより","meaning":"頼り","section":2},{"no":107,"word":"物語","meaning":"世間話","section":2},{"no":108,"word":"ためし","meaning":"先例","section":2},{"no":109,"word":"いそぎ","meaning":"準備","section":2},{"no":110,"word":"用意","meaning":"心づかい","section":2},{"no":111,"word":"かたち","meaning":"顔立ち","section":2},{"no":112,"word":"かげ","meaning":"光","section":2},{"no":113,"word":"けしき","meaning":"様子","section":2},{"no":114,"word":"こころざし","meaning":"愛情","section":2},{"no":115,"word":"ほい（本意）","meaning":"かねてからの願い","section":2},{"no":116,"word":"こと","meaning":"言葉","section":2},{"no":117,"word":"わざ（業）","meaning":"こと","section":2},{"no":118,"word":"よろづ方","meaning":"さまざま","section":2},{"no":119,"word":"ことわり","meaning":"道理","section":2},{"no":120,"word":"ひがごと（僻事）","meaning":"間違い","section":2},{"no":121,"word":"そらごと","meaning":"うそ","section":2},{"no":122,"word":"しるし","meaning":"効き目","section":2},{"no":123,"word":"料（れう）","meaning":"ため","section":2},{"no":124,"word":"禄（ろく）","meaning":"ほうび","section":2},{"no":125,"word":"としごろ","meaning":"長年","section":2},{"no":126,"word":"つとめて","meaning":"早朝","section":2},{"no":127,"word":"世・世の中","meaning":"男女の仲","section":2},{"no":128,"word":"いかで・いかでか","meaning":"どうして","section":2},{"no":129,"word":"いかが・いかに","meaning":"どのように","section":2},{"no":130,"word":"など・などか・などて・なじかは","meaning":"どうして","section":2},{"no":131,"word":"いつしか","meaning":"いつの間にか","section":2},{"no":132,"word":"おのづから","meaning":"自然に","section":2},{"no":133,"word":"なほ","meaning":"やはり","section":2},{"no":134,"word":"いとど","meaning":"ますます","section":2},{"no":135,"word":"げに","meaning":"なるほど","section":2},{"no":136,"word":"かく","meaning":"このように","section":2},{"no":137,"word":"さ","meaning":"そう","section":2},{"no":138,"word":"しか","meaning":"そう","section":2},{"no":139,"word":"と","meaning":"そのように","section":2},{"no":140,"word":"やがて","meaning":"その状態のまま","section":2},{"no":141,"word":"すなはち","meaning":"すぐに","section":2},{"no":142,"word":"やうやう・やうやく（漸う・漸く）","meaning":"しだいに","section":2},{"no":143,"word":"やをら・やはら","meaning":"そっと","section":2},{"no":144,"word":"なかなか（に）","meaning":"かえって","section":2},{"no":145,"word":"さすがに","meaning":"そうはいってもやはり","section":2},{"no":146,"word":"かたみに","meaning":"互いに","section":2},{"no":147,"word":"うたて","meaning":"いやなことに","section":2},{"no":148,"word":"なべて","meaning":"一般に","section":2},{"no":149,"word":"わざと","meaning":"わざわざ","section":2},{"no":150,"word":"あまた","meaning":"たくさん","section":2},{"no":151,"word":"ここら・そこら","meaning":"たくさん","section":2},{"no":152,"word":"え～打消","meaning":"～できない","section":2},{"no":153,"word":"な～そ","meaning":"～するな","section":2},{"no":154,"word":"おほかた～打消","meaning":"まったく～ない","section":2},{"no":155,"word":"さらに～打消","meaning":"まったく～ない","section":2},{"no":156,"word":"世に～打消","meaning":"まったく～ない","section":2},{"no":157,"word":"たえて～打消","meaning":"まったく～ない","section":2},{"no":158,"word":"つゆ～打消","meaning":"少しも～ない","section":2},{"no":159,"word":"ゆめ～打消・禁止","meaning":"決して～ない","section":2},{"no":160,"word":"つやつや～打消","meaning":"まったく～ない","section":2},{"no":161,"word":"をさをさ～打消","meaning":"ほとんど～ない","section":2},{"no":162,"word":"よも～打消推量","meaning":"まさか～ないだろう","section":2},{"no":163,"word":"あなかしこ～禁止","meaning":"決して～するな","section":2},{"no":164,"word":"ためらふ","meaning":"気持ちを静める","section":2},{"no":165,"word":"やすらふ（休らふ）","meaning":"ためらう","section":2},{"no":166,"word":"かたらふ","meaning":"語り合う","section":2},{"no":167,"word":"住む（すむ）","meaning":"女のもとに通う","section":2},{"no":168,"word":"やむ（止む）","meaning":"そのまま終わる","section":2},{"no":169,"word":"うつろふ","meaning":"色あせる","section":2},{"no":170,"word":"みいだす（見出だす）","meaning":"外を見る","section":2},{"no":171,"word":"もてなす","meaning":"振る舞う","section":2},{"no":172,"word":"あつかふ","meaning":"面倒を見る","section":2},{"no":173,"word":"あくがる","meaning":"魂が抜けてさまよう","section":2},{"no":174,"word":"あふ","meaning":"結婚する","section":2},{"no":175,"word":"しほたる","meaning":"涙で袖をぬらす","section":2},{"no":176,"word":"かきくらす","meaning":"悲しみで目の前が暗くなる","section":2},{"no":177,"word":"まどふ（惑ふ）","meaning":"迷う","section":2},{"no":178,"word":"たばかる","meaning":"工夫する","section":2},{"no":179,"word":"すさぶ","meaning":"気の向くままにする","section":2},{"no":180,"word":"すまふ","meaning":"抵抗する","section":2},{"no":181,"word":"まねぶ（学ぶ）","meaning":"まねる","section":2},{"no":182,"word":"ねぶ","meaning":"年を取る","section":2},{"no":183,"word":"おきつ","meaning":"決めておく","section":2},{"no":184,"word":"うれふ","meaning":"訴える","section":2},{"no":185,"word":"むすぶ（結ぶ・掬ぶ）","meaning":"結ぶ","section":2},{"no":186,"word":"とぶらふ","meaning":"訪ねる","section":2},{"no":187,"word":"やつす","meaning":"質素な姿になる","section":2},{"no":188,"word":"さはる","meaning":"差し支える","section":2},{"no":189,"word":"かしこまる","meaning":"恐縮する","section":2},{"no":190,"word":"かこつ","meaning":"嘆く","section":2},{"no":191,"word":"わく（分く）","meaning":"理解する","section":2},{"no":192,"word":"つつむ","meaning":"遠慮する","section":2},{"no":193,"word":"あらまほし","meaning":"望ましい","section":2},{"no":194,"word":"らうらうじ","meaning":"巧みだ","section":2},{"no":195,"word":"うるせし","meaning":"賢い","section":2},{"no":196,"word":"はかばかし","meaning":"しっかりしている","section":2},{"no":197,"word":"をさをさし（長長し）","meaning":"しっかりしている","section":2},{"no":198,"word":"さうなし","meaning":"並ぶものがない","section":2},{"no":199,"word":"くまなし","meaning":"曇りがない","section":2},{"no":200,"word":"ずちなし","meaning":"どうしようもない","section":2},{"no":201,"word":"またなし","meaning":"またとない","section":3},{"no":202,"word":"あいなし","meaning":"つまらない","section":3},{"no":203,"word":"はかなし","meaning":"頼りない","section":3},{"no":204,"word":"こころづきなし","meaning":"気にくわない","section":3},{"no":205,"word":"あへなし","meaning":"あっけない","section":3},{"no":206,"word":"よしなし（由無し）","meaning":"つまらない","section":3},{"no":207,"word":"おほけなし","meaning":"身の程知らずだ","section":3},{"no":208,"word":"さがなし","meaning":"意地が悪い","section":3},{"no":209,"word":"はしたなし","meaning":"いたたまれない","section":3},{"no":210,"word":"しどけなし","meaning":"だらしない","section":3},{"no":211,"word":"いぎたなし","meaning":"寝坊だ","section":3},{"no":212,"word":"ひとわろし（人悪し）","meaning":"みっともない","section":3},{"no":213,"word":"いぶせし","meaning":"気が晴れない","section":3},{"no":214,"word":"くちをし","meaning":"残念だ","section":3},{"no":215,"word":"あたらし","meaning":"惜しい","section":3},{"no":216,"word":"ねたし","meaning":"しゃくだ","section":3},{"no":217,"word":"こちたし","meaning":"大げさだ","section":3},{"no":218,"word":"けし","meaning":"異様だ","section":3},{"no":219,"word":"わびし（侘びし）","meaning":"つらい","section":3},{"no":220,"word":"こころぐるし","meaning":"気の毒だ","section":3},{"no":221,"word":"またし（全し）","meaning":"完全だ","section":3},{"no":222,"word":"さかし","meaning":"賢い","section":3},{"no":223,"word":"まばゆし","meaning":"まぶしい","section":3},{"no":224,"word":"かたじけなし","meaning":"恐れ多い","section":3},{"no":225,"word":"かしこし","meaning":"恐れ多い","section":3},{"no":226,"word":"しげし","meaning":"多い","section":3},{"no":227,"word":"すごし","meaning":"もの寂しい","section":3},{"no":228,"word":"いたし","meaning":"ひどい","section":3},{"no":229,"word":"おぼろけなり","meaning":"並ひととおりだ","section":3},{"no":230,"word":"なのめなり","meaning":"いい加減だ","section":3},{"no":231,"word":"清らなり・けうらなり","meaning":"清らかで美しい","section":3},{"no":232,"word":"まほなり","meaning":"完全である","section":3},{"no":233,"word":"あらはなり","meaning":"丸見えだ","section":3},{"no":234,"word":"あながちなり","meaning":"強引だ","section":3},{"no":235,"word":"せちなり","meaning":"切実だ","section":3},{"no":236,"word":"とみなり","meaning":"急だ","section":3},{"no":237,"word":"うちつけなり","meaning":"突然だ","section":3},{"no":238,"word":"さらなり","meaning":"言うまでもない","section":3},{"no":239,"word":"ねんごろなり・ねむごろなり","meaning":"親切だ","section":3},{"no":240,"word":"おいらかなり","meaning":"おだやかだ","section":3},{"no":241,"word":"あやにくなり","meaning":"意地が悪い","section":3},{"no":242,"word":"おぼえ","meaning":"評判","section":3},{"no":243,"word":"ひま（隙・暇）","meaning":"すき間","section":3},{"no":244,"word":"いとま","meaning":"暇","section":3},{"no":245,"word":"才（ざえ）","meaning":"漢学の教養","section":3},{"no":246,"word":"よろこび（喜び）","meaning":"褒美","section":3},{"no":247,"word":"こころばへ","meaning":"気立て","section":3},{"no":248,"word":"こころづくし","meaning":"物思いをすること","section":3},{"no":249,"word":"そこ","meaning":"あなた","section":3},{"no":250,"word":"ここ","meaning":"私","section":3},{"no":251,"word":"かれ","meaning":"あの人","section":3},{"no":252,"word":"それ","meaning":"その人","section":3},{"no":253,"word":"これ","meaning":"この人","section":3},{"no":254,"word":"あなた","meaning":"向こう","section":3},{"no":255,"word":"そなた","meaning":"そちら","section":3},{"no":256,"word":"こなた","meaning":"こちら","section":3},{"no":257,"word":"そのかみ","meaning":"その当時","section":3},{"no":258,"word":"せうと","meaning":"兄","section":3},{"no":259,"word":"おとうと・おとと","meaning":"弟","section":3},{"no":260,"word":"いも","meaning":"愛しい女性","section":3},{"no":261,"word":"つま","meaning":"夫","section":3},{"no":262,"word":"はらから（同胞）","meaning":"兄弟","section":3},{"no":263,"word":"かたへ","meaning":"片方","section":3},{"no":264,"word":"ほど（程）","meaning":"ころ","section":3},{"no":265,"word":"かぎり","meaning":"限界","section":3},{"no":266,"word":"きは","meaning":"身分","section":3},{"no":267,"word":"ついで","meaning":"順序","section":3},{"no":268,"word":"沙汰（さた）","meaning":"評議・裁き","section":3},{"no":269,"word":"とが","meaning":"罪","section":3},{"no":270,"word":"け","meaning":"ため","section":3},{"no":271,"word":"よし（由）","meaning":"風情","section":3},{"no":272,"word":"やう（様）","meaning":"様子","section":3},{"no":273,"word":"ちぎり","meaning":"約束","section":3},{"no":274,"word":"ほだし（絆）","meaning":"束縛となるもの","section":3},{"no":275,"word":"あやめ","meaning":"道理","section":3},{"no":276,"word":"うつつ","meaning":"現実","section":3},{"no":277,"word":"あるじ","meaning":"主人","section":3},{"no":278,"word":"ふるさと（古里・故郷）","meaning":"なじみの土地","section":3},{"no":279,"word":"さて","meaning":"そのまま","section":3},{"no":280,"word":"さながら","meaning":"そのまま","section":3},{"no":281,"word":"いま","meaning":"すぐに","section":3},{"no":282,"word":"せめて","meaning":"無理に","section":3},{"no":283,"word":"むべ（宜）","meaning":"なるほど","section":3},{"no":284,"word":"かつ","meaning":"一方では","section":3},{"no":285,"word":"ひねもす（終日）","meaning":"一日中","section":3},{"no":286,"word":"かまへて～打消・禁止","meaning":"決して～ない","section":3},{"no":287,"word":"あへて～打消","meaning":"まったく～ない","section":3},{"no":288,"word":"かけて（も）～打消","meaning":"まったく","section":3},{"no":289,"word":"さだめて～推量","meaning":"きっと～だろう","section":3},{"no":290,"word":"のたまふ・のたまはす","meaning":"おっしゃる（「言ふ」の尊敬語）","section":3},{"no":291,"word":"仰す（おほす）","meaning":"おっしゃる","section":3},{"no":292,"word":"聞こゆ・聞こえさす","meaning":"申し上げる","section":3},{"no":293,"word":"申す","meaning":"申し上げる","section":3},{"no":294,"word":"奏す","meaning":"（天皇に）申し上げる","section":3},{"no":295,"word":"啓す","meaning":"（皇后・中宮などに）申し上げる","section":3},{"no":296,"word":"承る","meaning":"お受けする","section":3},{"no":297,"word":"給ふ","meaning":"お与えになる","section":3},{"no":298,"word":"たまはす","meaning":"お与えになる","section":3},{"no":299,"word":"たまはる","meaning":"いただく","section":3},{"no":300,"word":"召す","meaning":"お召しになる","section":3},{"no":301,"word":"思す・思し召す","meaning":"お思いになる","section":4},{"no":302,"word":"おほとのごもる","meaning":"おやすみになる","section":4},{"no":303,"word":"さぶらふ・さうらふ","meaning":"お仕え申し上げる","section":4},{"no":304,"word":"はべり（侍り）","meaning":"お仕え申し上げる","section":4},{"no":305,"word":"奉る","meaning":"差し上げる","section":4},{"no":306,"word":"参らす","meaning":"差し上げる","section":4},{"no":307,"word":"まゐる（参る）","meaning":"参上する","section":4},{"no":308,"word":"まかる・まかづ（罷る・罷づ）","meaning":"退出する","section":4},{"no":309,"word":"あそばす","meaning":"なさる","section":4},{"no":310,"word":"つかうまつる","meaning":"お仕え申し上げる","section":4},{"no":311,"word":"聞こし召す","meaning":"お聞きになる","section":4},{"no":312,"word":"しろしめす","meaning":"ご存じである","section":4},{"no":313,"word":"おはす・おはします","meaning":"いらっしゃる","section":4},{"no":314,"word":"います・ます・まします・いますかり","meaning":"いらっしゃる","section":4},{"no":315,"word":"御覧ず","meaning":"ご覧になる","section":4}];
+const WORD_MAP = new Map(WORDS.map(w=>[w.no,w]));
+const DAY_INTERVALS=[0,1,2,4,7,14,30,60];
+const DB_KEY="kobun315_daily5_v2";
+const LEGACY_STATE_KEY="kobun315_state_v1";
+const LEGACY_SETTINGS_KEY="kobun315_settings_v1";
+const $=id=>document.getElementById(id);
+const asInt=(n,alt=0)=>Number.isFinite(Number(n))?Math.trunc(Number(n)):alt;
+function pad(n){return String(n).padStart(2,"0")}
+function dayKey(d=new Date()){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function dayFromMillis(ms){return Number.isFinite(ms)&&ms>0?dayKey(new Date(ms)):null}
+function addDays(key,n){const [y,m,d]=key.split("-").map(Number);const date=new Date(y,m-1,d+Number(n),12);return dayKey(date)}
+function daysBetween(a,b){const [ay,am,ad]=a.split("-").map(Number),[by,bm,bd]=b.split("-").map(Number);return Math.round((Date.UTC(by,bm-1,bd)-Date.UTC(ay,am-1,ad))/86400000)}
+function safeRead(k,other){try{return JSON.parse(localStorage.getItem(k))??other}catch{return other}}
+function defaultDB(){return {version:2,records:{},daily:{},settings:{timerSeconds:5,reviewCap:20},session:null,firstUsed:dayKey()}}
+function migrateLegacy(){const legacy=safeRead(LEGACY_STATE_KEY,null);const db=defaultDB();if(!legacy||typeof legacy!=="object")return db;let moved=0;for(const word of WORDS){const old=legacy[String(word.no)];if(!old||!Number.isFinite(Number(old.attempts))||Number(old.attempts)<=0)continue;const bad=old.lastResult==="wrong"||old.lastResult==="timeout";const stage=bad?0:(Number(old.successStreak)>=3?2:1);const lastDate=dayFromMillis(Number(old.lastSeen))||addDays(dayKey(),-1);const oldDue=dayFromMillis(Number(old.due));const recommendedDue=addDays(lastDate,stage>=2?2:1);db.records[String(word.no)]={introducedAt:lastDate,stage,dueDate:bad?addDays(dayKey(),1):(oldDue&&oldDue<recommendedDue?oldDue:recommendedDue),needsRelearn:bad,attempts:Math.max(0,asInt(old.attempts)),corrects:Math.max(0,asInt(old.corrects)),lapses:Math.max(0,asInt(old.lapses)),lastResult:bad?"wrong":"right",lastReviewedAt:lastDate,lastMs:Number.isFinite(old.lastLatency)?old.lastLatency:null};moved++}const setting=safeRead(LEGACY_SETTINGS_KEY,{});if([10,20,30,0].includes(Number(setting.reviewCap)))db.settings.reviewCap=Number(setting.reviewCap);if(moved)db.importedFromLegacy=true;return db}
+function loadDB(){const loaded=safeRead(DB_KEY,null);if(!loaded||loaded.version!==2)return migrateLegacy();return {...defaultDB(),...loaded,settings:{...defaultDB().settings,...loaded.settings},records:(loaded.records&&typeof loaded.records==="object")?loaded.records:{},daily:(loaded.daily&&typeof loaded.daily==="object")?loaded.daily:{}}}
+let DB=loadDB();
+let activeTab="homeView";let weakFilter="wrong";let sessionResult=null;let toastTimer=0;let timerRAF=0;let timerStarted=0;let timerLeft=0;let clockRunning=false;
+function persist(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB));return true}catch(e){toast("保存できませんでした。ブラウザの容量・設定を確認してください");return false}}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2400)}
+function rec(no){return DB.records[String(no)]||null}
+function ensureRec(no){if(!rec(no))DB.records[String(no)]={introducedAt:null,stage:0,dueDate:null,needsRelearn:false,attempts:0,corrects:0,lapses:0,lastResult:"",lastReviewedAt:null,lastMs:null};return rec(no)}
+function totalSeen(){return WORDS.filter(w=>!!rec(w.no)?.introducedAt).length}
+function introducedToday(){return WORDS.filter(w=>rec(w.no)?.introducedAt===dayKey()).length}
+function newQuota(){return Math.max(0,5-introducedToday())}
+function isDue(r){return !!r?.introducedAt && (!r.dueDate||r.dueDate<=dayKey())}
+function overdueList(){return WORDS.filter(w=>isDue(rec(w.no)))}
+function countPending(){return WORDS.filter(w=>rec(w.no)?.introducedAt&&rec(w.no).needsRelearn).length}
+function getDailyLog(k=dayKey()){return DB.daily[k]||{answers:0,corrects:0,wrongs:0,newWords:0}}
+function addDaily(type){const d=DB.daily[dayKey()]??={answers:0,corrects:0,wrongs:0,newWords:0,reviewedNos:[]};if(type==="new")d.newWords++;else{d.answers++;if(type==="right")d.corrects++;else d.wrongs++}}
+function markPlannedReview(no){const d=DB.daily[dayKey()]??={answers:0,corrects:0,wrongs:0,newWords:0,reviewedNos:[]};if(!Array.isArray(d.reviewedNos))d.reviewedNos=[];if(!d.reviewedNos.includes(no))d.reviewedNos.push(no)}
+function reviewCapRemaining(){const cap=DB.settings.reviewCap;if(cap===0)return Infinity;const used=Array.isArray(getDailyLog().reviewedNos)?new Set(getDailyLog().reviewedNos).size:0;return Math.max(0,cap-used)}
+function getNewWords(n=newQuota()){return WORDS.filter(w=>!rec(w.no)?.introducedAt).slice(0,n)}
+function reviewPriority(w){const r=rec(w.no);if(!r)return -1;const late=r.dueDate?Math.max(0,daysBetween(r.dueDate,dayKey())):10;return (r.needsRelearn?18:0)+Math.min(50,late)*.7+Math.min(7,r.lapses||0)*2+(7-(r.stage||0))*.5}
+function selectedDue(){const seen=new Set(Array.isArray(getDailyLog().reviewedNos)?getDailyLog().reviewedNos:[]);const items=overdueList().filter(w=>!seen.has(w.no)).sort((a,b)=>reviewPriority(b)-reviewPriority(a)||a.no-b.no);const remaining=reviewCapRemaining();return Number.isFinite(remaining)?items.slice(0,remaining):items}
+function stageName(stage,needsRelearn){if(needsRelearn||!stage)return "再学習";if(stage<=2)return "覚えかけ";if(stage<=4)return "定着練習中";return "定着段階"}
+function dateLabel(key){const [y,m,d]=key.split("-").map(Number);return `${m}月${d}日`}
+function formatHeadDate(){const dt=new Date();const weekdays="日月火水木金土";return `${dt.getMonth()+1}月${dt.getDate()}日（${weekdays[dt.getDay()]}）`}
+function getDayNumber(){const days=new Set(WORDS.map(w=>rec(w.no)?.introducedAt).filter(Boolean));return Math.min(63,days.size+(days.has(dayKey())?0:1))}
+function getStreak(){const touched=new Set(Object.entries(DB.daily).filter(([,d])=>(d.answers||0)+(d.newWords||0)>0).map(([k])=>k));let k=dayKey();if(!touched.has(k))k=addDays(k,-1);let streak=0;while(touched.has(k)){streak++;k=addDays(k,-1);if(streak>5000)break}return streak}
+function renderHome(){const total=totalSeen(),today=introducedToday(),due=overdueList().length,pending=countPending(),cap=DB.settings.reviewCap,available=selectedDue().length;$("headDate").textContent=formatHeadDate();$("todayDate").textContent=dateLabel(dayKey());$("heroDay").textContent=`DAY ${pad(getDayNumber())} / 63`;$("heroLearned").textContent=total;$("heroPercent").textContent=`${Math.round(total/315*100)}% に着手`;$("heroBar").style.width=`${total/315*100}%`;$("countNew").textContent=newQuota();$("countDue").textContent=due;$("countPending").textContent=pending;$("todayHeading").textContent=today>=5?"今日の新出5語は完了":"今日の5語";$("todayChip").textContent=DB.session?"続きがあります":today>=5?"新出5 / 5語":`${today} / 5語`;const pips=$("todayPips");pips.replaceChildren();for(let i=0;i<5;i++){const dot=document.createElement("span");dot.className="pip"+(i<Math.min(today,5)?" done":"");pips.appendChild(dot)}
+ const start=$("dailyStart");start.textContent=DB.session?"前回の続きから再開 →":(newQuota()||due)?"今日の学習を始める →":"今日の学習は完了しました";start.disabled=!DB.session&&!newQuota()&&!due;
+ $("reviewOnly").disabled=!DB.session&&due===0;$("weakQuick").disabled=!DB.session&&!WORDS.some(w=>(rec(w.no)?.lapses||0)>0);
+ $("todayNote").textContent=DB.session?"途中で閉じても、カードの続きから再開できます。":total===315?"315語の新出は一巡済みです。以後は復習を続けましょう。":"欠席日があっても未学習語は飛ばしません。1日5語のペースで進みます。";
+ const message=$("backlogNote");if(cap!==0&&due>available){message.hidden=false;message.textContent=`復習待ち ${due}語のうち、今日の残り上限内で ${available}語を出題します。残りの ${due-available}語も記録に残ります。`;}else message.hidden=true;
 }
-function clamp(v,min,max){ return Math.min(max,Math.max(min,v)); }
-
-function normalizeState(no){
-  const k=String(no);
-  if(!STATE[k]) STATE[k]={due:0,lapses:0,attempts:0,corrects:0,fluent:0,lastSeen:0,lastResult:"",lastLatency:null,stabilityDays:0,lastIntervalDays:0,successStreak:0,schedulerVersion:SCHEDULER_VERSION};
-  const s=STATE[k];
-  if(!Number.isFinite(s.stabilityDays)) s.stabilityDays=0;
-  if(!Number.isFinite(s.lastIntervalDays)) s.lastIntervalDays=0;
-  if(!Number.isFinite(s.successStreak)) s.successStreak=0;
-  return s;
+function showTab(view){if(activeTab==="studyView"&&view!=="studyView")pauseTimer();activeTab=view;document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id===view));document.querySelectorAll(".nav-item").forEach(el=>{const selected=el.dataset.view===view;el.classList.toggle("active",selected);el.setAttribute("aria-current",selected?"page":"false")});if(view==="homeView")renderHome();if(view==="weakView")renderWeak();if(view==="statsView")renderStats();if(view==="studyView")renderStudy();window.scrollTo({top:0,behavior:"instant"})}
+function sessionCard(){return DB.session?.queue?.[DB.session.index]||null}
+function queueEntry(no,type){return {no,type}}
+function shuffle(array){const a=array.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function buildSession(mode){if(DB.session){showTab("studyView");toast("前回の学習を再開しました");return true}
+ const reviewed=selectedDue();let preview=[],q1=[],q2=[],reviews=[];
+ if(mode==="daily"){
+  const retrain=reviewed.filter(w=>rec(w.no)?.needsRelearn);const fresh=getNewWords();const learnWords=retrain.concat(fresh).filter((w,i,a)=>a.findIndex(x=>x.no===w.no)===i);
+  preview=learnWords.map(w=>queueEntry(w.no,"learn"));q1=shuffle(learnWords).map(w=>queueEntry(w.no,"first"));q2=shuffle(learnWords).map(w=>queueEntry(w.no,"second"));reviews=reviewed.filter(w=>!rec(w.no)?.needsRelearn).map(w=>queueEntry(w.no,"review"));
+ }else if(mode==="review"){
+  const retrain=reviewed.filter(w=>rec(w.no)?.needsRelearn);preview=retrain.map(w=>queueEntry(w.no,"learn"));q1=shuffle(retrain).map(w=>queueEntry(w.no,"first"));q2=shuffle(retrain).map(w=>queueEntry(w.no,"second"));reviews=reviewed.filter(w=>!rec(w.no)?.needsRelearn).map(w=>queueEntry(w.no,"review"));
+ }else if(mode==="weak"){
+  const weak=WORDS.filter(w=>rec(w.no)?.introducedAt&&(rec(w.no)?.lapses||0)>0).sort((a,b)=>reviewPriority(b)-reviewPriority(a)||a.no-b.no).slice(0,15);
+  reviews=shuffle(weak).map(w=>queueEntry(w.no,"practice"));
+ }
+ // 復習を分散させ、新出語の最初と2回目の想起の間隔を確保。
+ const cut=Math.min(reviews.length,Math.floor(reviews.length/2));
+ const queue=[...reviews.slice(0,cut),...preview,...q1,...reviews.slice(cut),...q2];
+ if(!queue.length){toast(mode==="weak"?"苦手語はまだありません":mode==="review"?"復習待ちの単語はありません":"今日の学習は完了しています");return false}
+ DB.session={mode,createdDate:dayKey(),queue,index:0,phase:"initial",answerTime:0,remainingMs:null,correct:0,wrong:0,introduced:0,retries:{},learningOutcome:{}};persist();showTab("studyView");return true;
 }
-function persistAll(){
-  saveJSON(K.state,STATE); saveJSON(K.settings,SETTINGS); saveJSON(K.daily,DAILY); saveJSON(K.plan,PLAN);
+function stopTimer(){if(clockRunning){timerLeft=Math.max(0,timerLeft-(performance.now()-timerStarted));clockRunning=false}if(timerRAF)cancelAnimationFrame(timerRAF);timerRAF=0}
+function pauseTimer(){if(!DB.session||DB.session.phase!=="ask")return;stopTimer();DB.session.remainingMs=timerLeft;persist()}
+function tickTimer(){if(!clockRunning)return;const left=Math.max(0,timerLeft-(performance.now()-timerStarted));const limit=DB.settings.timerSeconds*1000;$("timerDisplay").textContent=`${(left/1000).toFixed(1)}秒`;$("timerFill").style.width=`${(left/limit)*100}%`;$("timerFill").classList.toggle("urgent",left<=2000);if(left<=0){timerLeft=0;clockRunning=false;timerRAF=0;submitUnrecalled("timeout");return}timerRAF=requestAnimationFrame(tickTimer)}
+function startTimer(){stopTimer();if(!DB.session||DB.session.phase!=="ask"||activeTab!=="studyView"||document.hidden)return;const limit=DB.settings.timerSeconds*1000;timerLeft=DB.session.remainingMs==null?limit:DB.session.remainingMs;if(timerLeft<=0){submitUnrecalled("timeout");return}timerStarted=performance.now();clockRunning=true;tickTimer()}
+function makeButton(title,cls,handler){const b=document.createElement("button");b.type="button";b.className=`btn ${cls}`;b.textContent=title;b.addEventListener("click",handler);return b}
+function phaseButtons(buttons){const host=$("studyActions");host.replaceChildren();host.className="study-actions"+(buttons.length===2?" double":"");for(const [text,cls,cb] of buttons){host.appendChild(makeButton(text,cls,cb))}}
+function renderStudy(){const s=DB.session;$("activeStudy").hidden=!s;$("studyIdle").hidden=!!s||!!sessionResult;$("sessionResult").hidden=!sessionResult;if(!s){if(sessionResult)renderSessionResult();return}
+ if(s.index>=s.queue.length){finishSession();return}
+ const entry=sessionCard();const word=WORD_MAP.get(entry.no);if(!word){s.index++;persist();renderStudy();return}
+ if(s.phase==="initial"){s.phase=entry.type==="learn"?"learn":"ask";s.remainingMs=null;persist()}
+ const phase=s.phase;$("studyMode").textContent=s.mode==="daily"?"今日の学習":s.mode==="review"?"期限の復習":"苦手語テスト";$("studyCount").textContent=`${s.index+1} / ${s.queue.length}`;$("studyProgress").style.width=`${s.index/s.queue.length*100}%`;
+ $("studyNo").textContent=`No.${word.no}　·　Section ${word.section}`;$("studyWord").textContent=word.word;$("studyMeaning").textContent=word.meaning;
+ const pill=$("studyPill"),meaningSpot=$("meaningSpot"),tip=$("studyTip"),foot=$("studyFootnote"),question=$("studyQuestion"),timerRow=$("timerRow"),feedback=$("feedbackLabel");
+ meaningSpot.hidden=(phase==="ask");timerRow.hidden=phase!=="ask";feedback.hidden=true;tip.textContent="";
+ if(phase==="learn"){
+  pill.className="pill";pill.textContent=rec(word.no)?.introducedAt?"思い出す前のおさらい":"はじめて学ぶ語";
+  question.textContent="まずは、言葉と意味を結びつけよう。";$("meaningTag").textContent="今日覚える意味";
+  tip.textContent="意味を声に出したり、自分の言葉で説明してから進みましょう。";
+  foot.textContent="新出は1日5語まで。ここでは時間制限はありません。";
+  phaseButtons([["意味を覚えた → 次へ","btn-primary",learnNext]]);
+ }else if(phase==="ask"){
+  pill.className="pill"+(entry.type==="retry"?" retry":entry.type==="first"||entry.type==="second"?"":" review");
+  pill.textContent=entry.type==="first"?"1回目の確認":entry.type==="second"?"2回目の確認":entry.type==="retry"?"もう一度チャレンジ":entry.type==="practice"?"苦手語の確認":"忘れる前の復習";
+  question.textContent="この単語の意味は？　声に出して答えよう。";foot.textContent="意味を思い出したらボタンを押し、答えを見て自己採点してください。";
+  phaseButtons([["思い出した →","btn-primary",beginCompare],["分からない","btn-subtle",()=>submitUnrecalled("skip")]]);
+  startTimer();
+ }else if(phase==="compare"){
+  pill.className="pill review";pill.textContent="答え合わせ";question.textContent="自分が思い出した意味と比較しよう。";$("meaningTag").textContent="正解（この教材の代表義）";
+  tip.textContent="同じ意味で答えられたら「合っていた」、違ったら「違っていた」。";
+  foot.textContent="正解かどうかは自己判定です。あいまいな場合は「違っていた」を選ぶと復習しやすくなります。";
+  phaseButtons([["合っていた ✓","btn-green",()=>gradeAnswer(true)],["違っていた","btn-danger-soft",()=>gradeAnswer(false)]]);
+ }else if(phase==="feedback"){
+  pill.className="pill retry";pill.textContent="もう一度覚えよう";question.textContent="この意味を確認して、次の問題へ。";$("meaningTag").textContent="正解（この教材の代表義）";
+  feedback.hidden=false;feedback.textContent=s.lastOutcome==="timeout"?"時間切れ · 後でもう一度出題します":"思い出せなかった · 後でもう一度出題します";
+  tip.textContent="忘れた単語は短い間隔でもう一度練習し、翌日も確認します。";foot.textContent="間違えたこと自体は問題ありません。次に思い出せるかが大切です。";
+  phaseButtons([["確認した · 次へ →","btn-primary",advanceCard]]);
+ }
 }
-function localDateFromKey(key){
-  const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(key||""));
-  if(!m) return new Date();
-  return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]),12,0,0,0);
+function learnNext(){const s=DB.session,e=sessionCard();if(!s||s.phase!=="learn"||!e)return;const r=ensureRec(e.no);if(!r.introducedAt){if(newQuota()<=0){toast("今日の新出は5語までです");return}r.introducedAt=dayKey();r.stage=0;r.needsRelearn=true;r.dueDate=dayKey();addDaily("new");s.introduced++}advanceCard()}
+function beginCompare(){const s=DB.session;if(!s||s.phase!=="ask")return;stopTimer();const lim=DB.settings.timerSeconds*1000;s.answerTime=Math.min(lim,lim-timerLeft);s.phase="compare";s.remainingMs=timerLeft;persist();renderStudy()}
+function submitUnrecalled(cause){const s=DB.session;if(!s||s.phase!=="ask")return;stopTimer();s.answerTime=DB.settings.timerSeconds*1000;recordGrade(false,cause);s.phase="feedback";s.lastOutcome=cause;s.remainingMs=0;persist();renderStudy()}
+function gradeAnswer(correct){const s=DB.session;if(!s||s.phase!=="compare")return;recordGrade(correct,correct?"right":"wrong");advanceCard()}
+function trackLearning(no){const key=String(no),s=DB.session;return s.learningOutcome[key]??=( {first:false,failed:false} )}
+function scheduleRetry(no){const s=DB.session;const k=String(no);s.retries[k]=(s.retries[k]||0)+1;if(s.retries[k]>2)return;const index=Math.min(s.index+4,s.queue.length);s.queue.splice(index,0,queueEntry(no,"retry"))}
+function recordGrade(correct,cause){const s=DB.session,e=sessionCard();if(!s||!e)return;const r=ensureRec(e.no);const today=dayKey();r.attempts=(r.attempts||0)+1;r.corrects=(r.corrects||0)+(correct?1:0);r.lapses=(r.lapses||0)+(correct?0:1);r.lastResult=correct?"right":"wrong";r.lastReviewedAt=today;r.lastMs=s.answerTime;if(correct){s.correct++;addDaily("right")}else{s.wrong++;addDaily("wrong")}if(e.type==="review"||(e.type==="first"&&r.introducedAt!==today))markPlannedReview(e.no)
+ if(e.type==="first"||e.type==="second"){
+  const o=trackLearning(e.no);
+  if(e.type==="first"&&correct)o.first=true;
+  if(!correct)o.failed=true;
+  if(e.type==="second"){
+   if(correct&&o.first&&!o.failed){r.stage=1;r.needsRelearn=false;r.dueDate=addDays(today,1)}else{r.stage=0;r.needsRelearn=true;r.dueDate=addDays(today,1)}
+  }else if(!correct){r.dueDate=addDays(today,1);r.needsRelearn=true}
+ }else if(e.type==="retry"){
+  // 同日の再テスト正解では、間隔復習の段階を進めない。
+  if(!correct){r.dueDate=addDays(today,1);r.needsRelearn=r.stage===0;}
+ }else if(e.type==="review"||e.type==="practice"){
+  if(correct){if(e.type==="review"||isDue(r)){r.stage=Math.min(7,Math.max(1,r.stage)+1);r.needsRelearn=false;r.dueDate=addDays(today,DAY_INTERVALS[r.stage]);}}
+  else{r.stage=Math.max(0,(r.stage||0)-2);r.needsRelearn=r.stage===0;r.dueDate=addDays(today,1)}
+ }
+ if(!correct)scheduleRetry(e.no);
+ persist();
 }
-function addDaysKey(key,n){
-  const d=localDateFromKey(key); d.setDate(d.getDate()+n);
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-}
-function dayDiff(aKey,bKey){
-  const a=localDateFromKey(aKey), b=localDateFromKey(bKey);
-  return Math.round((b-a)/(24*60*60*1000));
-}
-function formatDateShort(key){
-  const d=localDateFromKey(key); return `${d.getMonth()+1}/${d.getDate()}`;
-}
-function getPlanInfo(dayOverride=null){
-  const daily=PLAN.dailyNew||20;
-  const totalDays=Math.ceil(WORDS.length/daily);
-  const rawDay=dayOverride ?? (dayDiff(PLAN.startDate,todayKey())+1);
-  const day=Math.min(totalDays,Math.max(1,rawDay));
-  const start=(day-1)*daily+1;
-  const end=Math.min(WORDS.length,start+daily-1);
-  return {day,rawDay,totalDays,start,end,date:addDaysKey(PLAN.startDate,day-1),before:rawDay<1,after:rawDay>totalDays};
-}
-function recordDaily(ok,word){
-  const key=todayKey();
-  if(!DAILY[key]) DAILY[key]={attempts:0,corrects:0,wrong:0,planReviews:0};
-  const d=DAILY[key];
-  d.attempts=(d.attempts||0)+1;
-  if(ok) d.corrects=(d.corrects||0)+1; else d.wrong=(d.wrong||0)+1;
-  if(word?._planReview) d.planReviews=(d.planReviews||0)+1;
-}
-function jitterFactor(wordNo,seed){
-  let x=(Math.imul(Number(wordNo)||1,2654435761)+Math.imul(Number(seed)||1,1013904223))>>>0;
-  x^=x>>>16; x=Math.imul(x,2246822519)>>>0; x^=x>>>13; x=Math.imul(x,3266489917)>>>0; x^=x>>>16;
-  return 0.8+(x/4294967295)*0.4;
-}
-function chooseBaseIntervalDays(s,latency,recovery){
-  if(recovery) return 1;
-  const prev=Math.max(0,Number(s.stabilityDays)||0);
-  const fast=latency<=FAST_MS;
-  if(fast){
-    if(prev<1.5) return 5;
-    if(prev<8) return 14;
-    if(prev<25) return 35;
-    if(prev<60) return 90;
-    return Math.min(180,prev*1.8);
-  }
-  if(prev<0.5) return 1;
-  if(prev<2) return 4;
-  if(prev<8) return 12;
-  if(prev<22) return 30;
-  if(prev<55) return 75;
-  return Math.min(150,prev*1.6);
-}
-function scheduleAdaptiveDue(s,word,baseDays){
-  let days=baseDays;
-  if(baseDays>1.5) days=baseDays*jitterFactor(word.no,(s.corrects||0)+(s.attempts||0)+1);
-  const lapsePenalty=Math.max(0.82,1-Math.min(0.18,(s.lapses||0)*0.02));
-  if(baseDays>1.5) days*=lapsePenalty;
-  days=Math.max(1,Math.round(days*10)/10);
-  s.stabilityDays=baseDays;
-  s.lastIntervalDays=days;
-  s.due=Date.now()+days*DAY;
-  s.schedulerVersion=SCHEDULER_VERSION;
-  return days;
-}
-function recordCorrect(word,latency){
-  const s=normalizeState(word.no);
-  const recovery=!!word._retry || s.lastResult==="wrong" || s.lastResult==="timeout";
-  const baseDays=chooseBaseIntervalDays(s,latency,recovery);
-  s.attempts++; s.corrects++; s.lastSeen=Date.now(); s.lastResult="correct"; s.lastLatency=Math.round(latency);
-  if(latency<=FAST_MS) s.fluent=(s.fluent||0)+1;
-  s.successStreak=recovery?1:(s.successStreak||0)+1;
-  scheduleAdaptiveDue(s,word,baseDays);
-  recordDaily(true,word); sessionCorrect++; sessionAnswered++;
-  persistAll();
-}
-function recordWrong(word,latency,reason){
-  const s=normalizeState(word.no);
-  s.attempts++; s.lapses=(s.lapses||0)+1; s.lastSeen=Date.now(); s.lastResult=reason||"wrong"; s.lastLatency=Math.round(latency||LIMIT_MS);
-  s.successStreak=0;
-  s.stabilityDays=1;
-  s.lastIntervalDays=1;
-  s.due=Date.now()+DAY;
-  s.schedulerVersion=SCHEDULER_VERSION;
-  recordDaily(false,word); sessionWrong++; sessionAnswered++;
-  persistAll();
-  scheduleRetry(word);
-}
-function scheduleRetry(word){
-  const k=String(word.no);
-  retryCount[k]=(retryCount[k]||0)+1;
-  if(retryCount[k]>2) return;
-  const insertAt=Math.min(currentIndex+6,sessionQueue.length);
-  sessionQueue.splice(insertAt,0,Object.assign({},word,{_retry:true,_planReview:false}));
-}
-function shuffle(a){
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
-  return a;
-}
-
-function applySettingsToUI(){
-  $("rangeStart").value=SETTINGS.start;
-  $("rangeEnd").value=SETTINGS.end;
-  $("sessionSize").value=String(SETTINGS.size);
-  $("reviewCap").value=String(Number.isFinite(Number(SETTINGS.reviewCap))?SETTINGS.reviewCap:30);
-}
-function readSettings(){
-  if(!WORDS.length) return;
-  const maxNo=Math.max(...WORDS.map(w=>w.no));
-  let a=clamp(parseInt($("rangeStart").value||1,10),1,maxNo);
-  let b=clamp(parseInt($("rangeEnd").value||maxNo,10),1,maxNo);
-  if(a>b) [a,b]=[b,a];
-  SETTINGS.start=a; SETTINGS.end=b;
-  SETTINGS.size=parseInt($("sessionSize").value,10)||20;
-  SETTINGS.reviewCap=parseInt($("reviewCap").value,10);
-  if(!Number.isFinite(SETTINGS.reviewCap)) SETTINGS.reviewCap=30;
-  saveJSON(K.settings,SETTINGS);
-}
-function meaningParts(meaning){
-  return String(meaning??"").split("／").map(x=>x.trim()).filter(Boolean);
-}
-function setMeaning(el,meaning){
-  const parts=meaningParts(meaning);
-  el.textContent="";
-  parts.forEach((part,i)=>{
-    const row=document.createElement("div"); row.className="meaning-item";
-    const num=document.createElement("span"); num.className="meaning-num"; num.textContent=String(i+1);
-    const text=document.createElement("span"); text.textContent=part;
-    row.appendChild(num); row.appendChild(text); el.appendChild(row);
-  });
-  $("meaningCount").textContent=`${parts.length}義`;
-}
-function setMiniMeaning(el,meaning){
-  el.textContent="";
-  meaningParts(meaning).forEach((part,i)=>{
-    const s=document.createElement("span"); s.className="mini-meaning"; s.textContent=`${i+1}. ${part}`; el.appendChild(s);
-  });
-}
-
-function getDailyReviewCap(){
-  const v=Number(SETTINGS.reviewCap);
-  return v===0?Infinity:Math.max(0,Number.isFinite(v)?v:30);
-}
-function reviewPriority(word,now=Date.now()){
-  const s=STATE[String(word.no)]||{};
-  const overdueDays=Math.max(0,(now-(s.due||now))/DAY);
-  const lapse=Math.min(8,(s.lapses||0)*0.8);
-  const slow=Number.isFinite(s.lastLatency)?clamp((s.lastLatency-FAST_MS)/(LIMIT_MS-FAST_MS),0,1.2)*2:1;
-  const fragile=2/Math.sqrt(Math.max(0.5,Number(s.stabilityDays)||1));
-  const wrongBoost=(s.lastResult==="wrong"||s.lastResult==="timeout")?6:0;
-  return Math.log1p(overdueDays)*4 + overdueDays*0.15 + lapse + slow + fragile + wrongBoost;
-}
-function prioritizeDue(words,limit=Infinity){
-  const now=Date.now();
-  const arr=words.slice().sort((a,b)=>reviewPriority(b,now)-reviewPriority(a,now) || (STATE[String(a.no)]?.due||0)-(STATE[String(b.no)]?.due||0));
-  return Number.isFinite(limit)?arr.slice(0,Math.max(0,limit)):arr;
-}
-function planWordStats(info){
-  const range=WORDS.filter(w=>w.no>=info.start&&w.no<=info.end);
-  const attempted=range.filter(w=>(STATE[String(w.no)]?.attempts||0)>0).length;
-  const remaining=range.length-attempted;
-  const now=Date.now();
-  const introducedEnd=info.after?WORDS.length:info.end;
-  const dueTotal=WORDS.filter(w=>w.no<=introducedEnd && (STATE[String(w.no)]?.attempts||0)>0 && (STATE[String(w.no)]?.due||Infinity)<=now).length;
-  const cap=getDailyReviewCap();
-  const reviewedToday=(DAILY[todayKey()]?.planReviews||0);
-  const capRemaining=Number.isFinite(cap)?Math.max(0,cap-reviewedToday):Infinity;
-  const duePlanned=Number.isFinite(capRemaining)?Math.min(dueTotal,capRemaining):dueTotal;
-  return {attempted,remaining,dueTotal,duePlanned,total:range.length,cap,reviewedToday,capRemaining};
-}
-function sectionLabelForRange(start,end){
-  const secs=[...new Set(WORDS.filter(w=>w.no>=start&&w.no<=end).map(w=>w.section).filter(Boolean))];
-  if(!secs.length) return "";
-  return secs.length===1?`Section ${secs[0]}`:`Section ${secs[0]}–${secs[secs.length-1]}`;
-}
-function renderPlan(){
-  if(!WORDS.length) return;
-  if(!PLAN.startDate) PLAN.startDate=todayKey();
-  const info=getPlanInfo();
-  const st=planWordStats(info);
-  const secLabel=sectionLabelForRange(info.start,info.end);
-  $("planStartDate").value=PLAN.startDate;
-  $("planDayLabel").textContent=info.after?`${info.totalDays}日計画 完了`:info.before?`開始前 · Day 1 / ${info.totalDays}`:`Day ${info.day} / ${info.totalDays}`;
-  $("planTitle").textContent=`${secLabel} · No.${info.start}–${info.end}`;
-  $("planDateText").textContent=info.before?`開始日は ${formatDateShort(PLAN.startDate)} です`:info.after?`新出315語を一巡しました`:`今日 ${formatDateShort(todayKey())} の新出${st.total}語`;
-  $("planNewProgress").textContent=`${st.attempted} / ${st.total}`;
-  $("planProgressBar").style.width=`${st.total?st.attempted/st.total*100:0}%`;
-  $("planRemaining").textContent=info.after?0:st.remaining;
-  $("planDue").textContent=(Number.isFinite(st.cap)&&st.dueTotal>st.duePlanned)?`${st.duePlanned} / ${st.dueTotal}`:st.dueTotal;
-  $("planComplete").style.display=info.after?"block":"none";
-  const backlog=$("planBacklog");
-  if(st.dueTotal>st.duePlanned){
-    backlog.style.display="block";
-    backlog.textContent=st.capRemaining<=0
-      ?`今日の復習上限 ${st.cap}語に到達しました。期限超過の残り ${st.dueTotal}語は明日以降に優先して回します。`
-      :`期限が来ている語は ${st.dueTotal}語あります。今日は残り上限 ${st.capRemaining}語まで出題し、超過分は翌日以降へ繰り越します。`;
-  }else backlog.style.display="none";
-  const btn=$("planStartBtn");
-  if(info.before){ btn.textContent="Day 1 を先に始める"; }
-  else if(info.after){
-    if(st.duePlanned>0) btn.textContent=`期限復習 ${st.duePlanned}語を始める`;
-    else if(st.dueTotal>0) btn.textContent="今日の復習上限に到達";
-    else btn.textContent="復習する語はありません";
-  }
-  else if(st.remaining===0 && st.duePlanned===0){ btn.textContent=st.dueTotal>0?"今日の復習上限に到達":"今日の新出20語は完了"; }
-  else { btn.textContent=`今日の学習を始める${st.duePlanned?`（復習${st.duePlanned} + 新出${st.remaining}）`:`（新出${st.remaining}）`}`; }
-  btn.disabled=info.after?(st.duePlanned===0):(st.remaining===0&&st.duePlanned===0);
-  btn.style.opacity=btn.disabled?".45":"1";
-
-  const host=$("planSchedule");
-  host.innerHTML="";
-  for(let d=1;d<=info.totalDays;d++){
-    const x=getPlanInfo(d);
-    const range=WORDS.filter(w=>w.no>=x.start&&w.no<=x.end);
-    const remaining=range.filter(w=>!(STATE[String(w.no)]?.attempts>0)).length;
-    const row=document.createElement("div");
-    row.className=`plan-dayrow${d===info.day&&!info.before&&!info.after?" today":""}${remaining===0?" done":""}`;
-    row.innerHTML=`<div class="day">Day ${d}</div><div class="range">${sectionLabelForRange(x.start,x.end)}<br>No.${x.start}–${x.end}</div><div class="date">${formatDateShort(x.date)}${remaining===0?" ✓":""}</div>`;
-    host.appendChild(row);
-  }
-}
-function refreshHome(){
-  const ready=WORDS.length>0;
-  $("dataDot").classList.toggle("ready",ready);
-  $("dataTitle").textContent=ready?`${WORDS.length}語を収録済み`:"単語データがありません";
-  $("dataSub").textContent=ready?`ファイル読み込み不要ですぐ学習できます`:"";
-  $("startBtn").disabled=!ready;
-  $("startBtn").style.opacity=ready?"1":".45";
-  if(!ready){
-    ["dueStat","wrongStat","todayStat","accStat"].forEach(id=>$(id).textContent="—");
-    return;
-  }
-  readSettings();
-  const inRange=WORDS.filter(w=>w.no>=SETTINGS.start&&w.no<=SETTINGS.end);
-  const now=Date.now();
-  let due=0,wrong=0,attempts=0,corrects=0;
-  for(const w of inRange){
-    const s=STATE[String(w.no)];
-    if(!s) continue;
-    if(s.attempts>0 && s.due<=now) due++;
-    if((s.lapses||0)>0) wrong++;
-    attempts+=s.attempts||0; corrects+=s.corrects||0;
-  }
-  const d=DAILY[todayKey()]||{attempts:0};
-  $("dueStat").textContent=due;
-  $("wrongStat").textContent=wrong;
-  $("todayStat").textContent=d.attempts||0;
-  $("accStat").textContent=attempts?`${Math.round(corrects/attempts*100)}%`:"—";
-  renderPlan();
-}
-function buildSession(mode="normal"){
-  readSettings();
-  const inRange=WORDS.filter(w=>w.no>=SETTINGS.start&&w.no<=SETTINGS.end);
-  const now=Date.now();
-  let q=[];
-  if(mode==="plan"){
-    const info=getPlanInfo();
-    const planEnd=info.after?WORDS.length:info.end;
-    const dueAll=WORDS.filter(w=>w.no<=planEnd && (STATE[String(w.no)]?.attempts||0)>0 && (STATE[String(w.no)]?.due||Infinity)<=now);
-    const cap=getDailyReviewCap();
-    const reviewedToday=(DAILY[todayKey()]?.planReviews||0);
-    const capRemaining=Number.isFinite(cap)?Math.max(0,cap-reviewedToday):Infinity;
-    const due=prioritizeDue(dueAll,capRemaining).map(w=>Object.assign({},w,{_planReview:true}));
-    const newWords=info.after?[]:WORDS.filter(w=>w.no>=info.start&&w.no<=info.end && !(STATE[String(w.no)]?.attempts>0)).sort((a,b)=>a.no-b.no);
-    const seen=new Set();
-    q=due.concat(newWords).filter(w=>{if(seen.has(w.no)) return false; seen.add(w.no); return true;});
-  }else if(mode==="wrong"){
-    q=inRange.filter(w=>(STATE[String(w.no)]?.lapses||0)>0)
-      .sort((a,b)=>(STATE[String(b.no)]?.lastSeen||0)-(STATE[String(a.no)]?.lastSeen||0));
-    q=shuffle(q.slice(0,Math.max(SETTINGS.size,20)));
-  }else{
-    const due=inRange.filter(w=>{
-      const s=STATE[String(w.no)];
-      return s && s.attempts>0 && s.due<=now;
-    });
-    const prioritized=prioritizeDue(due);
-    const unseen=inRange.filter(w=>!STATE[String(w.no)] || !(STATE[String(w.no)].attempts>0)).sort((a,b)=>a.no-b.no);
-    q=prioritized.concat(unseen).slice(0,SETTINGS.size);
-    if(q.length<SETTINGS.size){
-      const ids=new Set(q.map(w=>w.no));
-      const extra=inRange.filter(w=>!ids.has(w.no) && STATE[String(w.no)]?.attempts>0)
-        .sort((a,b)=>(STATE[String(a.no)]?.due||Infinity)-(STATE[String(b.no)]?.due||Infinity));
-      q=q.concat(extra.slice(0,SETTINGS.size-q.length));
-    }
-  }
-  sessionQueue=q.map(w=>Object.assign({},w));
-  currentIndex=0; sessionCorrect=0; sessionWrong=0; sessionAnswered=0; retryCount={};
-  if(!sessionQueue.length){
-    let msg=mode==="wrong"?"誤答履歴がありません":mode==="plan"?"今日の新出と期限復習は完了しています":"出題できる単語がありません";
-    if(mode==="plan"){
-      const st=planWordStats(getPlanInfo());
-      if(st.dueTotal>0 && st.capRemaining<=0) msg="今日の復習上限に到達しました。残りは明日以降へ繰り越します";
-    }
-    toast(msg); return false;
-  }
-  return true;
-}
-function startSession(mode="normal"){
-  if(!WORDS.length){toast("単語データがありません");return}
-  if(!buildSession(mode)) return;
-  $("summaryWrap").style.display="none";
-  $("studyCardWrap").style.display="block";
-  switchView("studyView",false);
-  showCurrent();
-}
-function showCurrent(){
-  clearTimer();
-  if(currentIndex>=sessionQueue.length){ finishSession(); return; }
-  currentWord=sessionQueue[currentIndex]; promptResolved=false;
-  $("wordNo").textContent=`No.${currentWord.no}${currentWord._retry?" · 再テスト":""}`;
-  $("wordSection").textContent=currentWord.section?`Section ${currentWord.section}`:"";
-  $("wordText").textContent=currentWord.word;
-  setMeaning($("answerText"),currentWord.meaning);
-  $("answerPanel").classList.remove("show");
-  $("choiceGrid").innerHTML="";
-  $("knowBtn").style.display="block";
-  $("timerBox").style.display="block";
-  $("resultTag").className="resulttag";
-  $("resultTag").textContent="";
-  const pct=sessionQueue.length?currentIndex/sessionQueue.length*100:0;
-  $("progressBar").style.width=`${pct}%`;
-  $("studyCounter").textContent=`${currentIndex+1} / ${sessionQueue.length}`;
-  timerRemaining=LIMIT_MS; currentPromptStart=performance.now(); startTimer();
-}
-function startTimer(){
-  clearTimer();
-  timerRunning=true;
-  timerDeadline=performance.now()+timerRemaining;
-  const tick=()=>{
-    if(!timerRunning) return;
-    const left=Math.max(0,timerDeadline-performance.now());
-    timerRemaining=left;
-    $("timerText").textContent=`${(left/1000).toFixed(1)} 秒`;
-    $("timerFill").style.transform=`scaleX(${left/LIMIT_MS})`;
-    if(left<=0){ timerRunning=false; timeoutWord(); return; }
-    timerRAF=requestAnimationFrame(tick);
-  };
-  timerRAF=requestAnimationFrame(tick);
-}
-function clearTimer(){
-  timerRunning=false;
-  if(timerRAF) cancelAnimationFrame(timerRAF);
-  timerRAF=0;
-}
-function timeoutWord(){
-  if(promptResolved||!currentWord) return;
-  promptResolved=true;
-  clearTimer();
-  $("timerFill").style.transform="scaleX(0)";
-  $("timerText").textContent="時間切れ";
-  recordWrong(currentWord,LIMIT_MS,"timeout");
-  revealAnswer(false,true,LIMIT_MS);
-}
-function knowWord(){
-  if(promptResolved||!currentWord) return;
-  const latency=Math.min(LIMIT_MS,performance.now()-currentPromptStart);
-  promptResolved=true; clearTimer();
-  revealAnswer(true,false,latency);
-}
-function revealAnswer(pressed,timeout,latency){
-  $("knowBtn").style.display="none";
-  $("timerBox").style.display="none";
-  $("answerPanel").classList.add("show");
-  const tag=$("resultTag");
-  const grid=$("choiceGrid");
-  if(timeout){
-    tag.className="resulttag bad"; tag.textContent="5秒超過 → 誤答";
-    grid.className="choice-grid one";
-    grid.innerHTML=`<button class="primary" id="nextOnly">次へ</button>`;
-    $("nextOnly").onclick=nextCard;
-  }else{
-    tag.className="resulttag ok"; tag.textContent=`${(latency/1000).toFixed(1)}秒で回答`;
-    grid.className="choice-grid";
-    grid.innerHTML=`<button class="good" id="confirmRight">意味を全部言えた</button><button class="badbtn" id="confirmWrong">1つでも抜け・違いあり</button>`;
-    $("confirmRight").onclick=()=>{recordCorrect(currentWord,latency);nextCard()};
-    $("confirmWrong").onclick=()=>{recordWrong(currentWord,latency,"wrong");nextCard()};
-  }
-}
-function nextCard(){
-  currentIndex++;
-  showCurrent();
-}
-function finishSession(){
-  clearTimer();
-  $("studyCardWrap").style.display="none";
-  $("summaryWrap").style.display="block";
-  $("progressBar").style.width="100%";
-  const denom=sessionCorrect+sessionWrong;
-  const acc=denom?Math.round(sessionCorrect/denom*100):0;
-  $("summaryAccuracy").textContent=`${acc}%`;
-  $("summaryText").textContent=`全義正解 ${sessionCorrect} / 誤答 ${sessionWrong}（再テストを含む）`;
-  $("studyCounter").textContent="完了";
-  refreshAll();
-}
-function renderMistakes(){
-  const q=$("mistakeSearch").value.trim().toLowerCase();
-  let arr=WORDS.filter(w=>(STATE[String(w.no)]?.lapses||0)>0);
-  if(q) arr=arr.filter(w=>w.word.toLowerCase().includes(q)||w.meaning.toLowerCase().includes(q)||String(w.no)===q);
-  arr.sort((a,b)=>(STATE[String(b.no)]?.lastSeen||0)-(STATE[String(a.no)]?.lastSeen||0));
-  const host=$("mistakeList"); host.innerHTML="";
-  if(!arr.length){host.innerHTML=`<div class="empty">誤答リストはまだありません。</div>`;return}
-  const frag=document.createDocumentFragment();
-  for(const w of arr){
-    const s=STATE[String(w.no)];
-    const el=document.createElement("div"); el.className="card mistake";
-    el.innerHTML=`<div class="head"><div><div class="en"></div><div class="jp"></div></div><span class="pill">${s.lapses}回</span></div>
-      <div class="foot"><span>No.${w.no}${w.section?` · Sec.${w.section}`:""}</span><span>全${meaningParts(w.meaning).length}義</span></div>`;
-    el.querySelector(".en").textContent=w.word;
-    setMiniMeaning(el.querySelector(".jp"),w.meaning);
-    frag.appendChild(el);
-  }
-  host.appendChild(frag);
-}
-function renderStats(){
-  if(!WORDS.length){
-    ["sAttempts","sDue","sFluent"].forEach(id=>$(id).textContent="0"); $("sAccuracy").textContent="—"; $("stageBars").innerHTML=`<div class="empty">学習を始めると表示されます。</div>`; return;
-  }
-  const now=Date.now();
-  let attempts=0,corrects=0,fluentWords=0,due=0,learned=0;
-  const labels=["未学習","復習期限","1日以内","2〜7日","8〜21日","22〜60日","61日以上"];
-  const buckets=Array(labels.length).fill(0);
-  for(const w of WORDS){
-    const st=STATE[String(w.no)];
-    if(!st||!(st.attempts>0)){ buckets[0]++; continue; }
-    learned++;
-    attempts+=st.attempts||0; corrects+=st.corrects||0;
-    if(st.lastResult==="correct" && (st.lastLatency??Infinity)<=FAST_MS) fluentWords++;
-    const dueAt=st.due||now;
-    if(dueAt<=now){ due++; buckets[1]++; continue; }
-    const days=(dueAt-now)/DAY;
-    if(days<=1.5) buckets[2]++;
-    else if(days<=7) buckets[3]++;
-    else if(days<=21) buckets[4]++;
-    else if(days<=60) buckets[5]++;
-    else buckets[6]++;
-  }
-  $("sAttempts").textContent=attempts;
-  $("sAccuracy").textContent=attempts?`${Math.round(corrects/attempts*100)}%`:"—";
-  $("sDue").textContent=due;
-  $("sFluent").textContent=fluentWords;
-  const max=Math.max(1,...buckets);
-  $("stageBars").innerHTML=buckets.map((v,i)=>`<div class="bar-row"><div class="bar-head"><span>${labels[i]}</span><b>${v}</b></div><div class="bar-bg"><div class="bar-v" style="width:${v/max*100}%"></div></div></div>`).join("");
-  $("statsFoot").textContent=`315語の内訳：未学習 ${buckets[0]}語 / 学習済み ${learned}語。各語の次回復習予定を数えています。完全正答が速い語ほど間隔を大きく、誤答語ほど短くします。`;
-}
-function refreshAll(){ refreshHome(); renderMistakes(); renderStats(); }
-function switchView(id,refresh=true){
-  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
-  if(refresh){
-    if(id==="homeView") refreshHome();
-    if(id==="mistakeView") renderMistakes();
-    if(id==="statsView") renderStats();
-  }
-}
-document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.view)));
-$("startBtn").onclick=()=>startSession("normal");
-$("planStartBtn").onclick=()=>startSession("plan");
-$("planStartDate").addEventListener("change",()=>{
-  if($("planStartDate").value){ PLAN.startDate=$("planStartDate").value; saveJSON(K.plan,PLAN); renderPlan(); }
-});
-$("knowBtn").onclick=knowWord;
-$("summaryWrongBtn").onclick=()=>startSession("wrong");
-$("summaryHomeBtn").onclick=()=>switchView("homeView");
-$("reviewWrongBtn").onclick=()=>startSession("wrong");
-$("mistakeSearch").addEventListener("input",renderMistakes);
-["rangeStart","rangeEnd","sessionSize","reviewCap"].forEach(id=>{
-  $(id).addEventListener("change",()=>{readSettings();refreshHome()});
-});
-$("exportBtn").onclick=()=>{
-  const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),state:STATE,daily:DAILY,settings:SETTINGS,plan:PLAN},null,2)],{type:"application/json"});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`kobun315-history-${todayKey()}.json`; a.click(); URL.revokeObjectURL(a.href);
-};
-$("resetBtn").onclick=()=>{
-  if(!confirm("学習履歴をすべてリセットします。古文単語データは残ります。よろしいですか？"))return;
-  STATE={}; DAILY={}; persistAll(); refreshAll(); toast("学習履歴をリセットしました");
-};
-document.addEventListener("visibilitychange",()=>{
-  if(document.hidden){
-    if(timerRunning){ timerRemaining=Math.max(0,timerDeadline-performance.now()); clearTimer(); }
-  }else if(!promptResolved && currentWord && $("studyView").classList.contains("active") && timerRemaining>0){
-    currentPromptStart=performance.now()-(LIMIT_MS-timerRemaining);
-    startTimer();
-  }
-});
-applySettingsToUI();
-refreshAll();
+function advanceCard(){const s=DB.session;if(!s)return;stopTimer();s.index++;s.phase="initial";s.remainingMs=null;s.answerTime=0;s.lastOutcome=null;persist();if(s.index>=s.queue.length){finishSession();return}renderStudy()}
+function finishSession(){const s=DB.session;if(!s)return;stopTimer();sessionResult={correct:s.correct,wrong:s.wrong,introduced:s.introduced,mode:s.mode};DB.session=null;persist();renderHome();showTab("studyView")}
+function renderSessionResult(){const r=sessionResult;if(!r)return;$("resultCorrect").textContent=r.correct;$("resultWrong").textContent=r.wrong;$("resultIntroduced").textContent=r.introduced;$("resultLede").textContent=r.mode==="daily"?"今日のメニューを最後まで終えました。":"復習セッションが完了しました。";$("resultInfo").textContent=r.wrong?`間違えた回答が ${r.wrong} 回ありました。同じセッション内で再確認し、必要な単語は翌日も復習します。`:"今日の確認ができました。定着には日を空けて繰り返し思い出すことが大切です。"}
+function weakWords(){const q=$("weakSearch").value.trim().toLowerCase();return WORDS.filter(w=>{const r=rec(w.no);if(!r?.introducedAt)return false;if(weakFilter==="wrong"&&!(r.lapses>0))return false;if(weakFilter==="due"&&!isDue(r))return false;return !q||w.word.toLowerCase().includes(q)||w.meaning.toLowerCase().includes(q)||String(w.no).includes(q)}).sort((a,b)=>reviewPriority(b)-reviewPriority(a)||a.no-b.no)}
+function renderWeak(){document.querySelectorAll(".filter").forEach(b=>b.classList.toggle("active",b.dataset.filter===weakFilter));const host=$("weakList");host.replaceChildren();const arr=weakWords();$("weakStart").disabled=!WORDS.some(w=>rec(w.no)?.introducedAt&&(rec(w.no).lapses||0)>0)&&!DB.session;if(!arr.length){const div=document.createElement("div");div.className="white-card empty";div.textContent=weakFilter==="wrong"?"間違えた単語はまだありません。":weakFilter==="due"?"今すぐ復習する単語はありません。":"条件に合う単語がありません。";host.appendChild(div);return}for(const w of arr){const r=rec(w.no);const card=document.createElement("article");card.className="white-card weak-card";const head=document.createElement("div");head.className="weak-head";const name=document.createElement("strong");name.textContent=w.word;const count=document.createElement("span");count.className="count";count.textContent=`誤答 ${r.lapses||0}回`;head.append(name,count);const meta=document.createElement("div");meta.className="weak-meta";const dueText=isDue(r)?"復習待ち":`次回 ${r.dueDate||"未定"}`;meta.textContent=`No.${w.no} · ${stageName(r.stage,r.needsRelearn)} · ${dueText}`;const answer=document.createElement("div");answer.className="weak-answer";answer.textContent=w.meaning;const row=document.createElement("div");row.className="weak-actions";const show=makeButton("意味を表示","btn-light",()=>{const opened=answer.classList.toggle("open");show.textContent=opened?"意味を隠す":"意味を表示"});row.appendChild(show);card.append(head,meta,answer,row);host.appendChild(card)}}
+function renderStats(){const seen=totalSeen();let stable=0,correct=0,attempts=0;const buckets=[0,0,0,0];for(const w of WORDS){const r=rec(w.no);if(!r?.introducedAt){buckets[0]++;continue}if(r.stage>=5&&!r.needsRelearn){buckets[3]++;stable++}else if(r.needsRelearn||r.stage===0)buckets[1]++;else buckets[2]++;correct+=r.corrects||0;attempts+=r.attempts||0}
+ $("statSeen").textContent=seen;$("statStable").textContent=stable;$("statStreak").textContent=`${getStreak()}日`;$("statAccuracy").textContent=attempts?`${Math.round(correct/attempts*100)}%`:"—";const host=$("stageChart");host.replaceChildren();const labels=["未学習","再学習・初期確認","定着練習中","定着段階"],classes=["","amber","","mint"];for(let i=0;i<4;i++){const outer=document.createElement("div");outer.className="stage-row";const top=document.createElement("div");top.className="stage-top";const label=document.createElement("span");label.textContent=labels[i];const number=document.createElement("b");number.textContent=`${buckets[i]}語`;top.append(label,number);const bg=document.createElement("div");bg.className="bar-bg";const fill=document.createElement("div");fill.className="bar-fill "+classes[i];fill.style.width=`${buckets[i]/315*100}%`;bg.appendChild(fill);outer.append(top,bg);host.appendChild(outer)}
+ const bands=$("bandChart");bands.replaceChildren();for(let start=1;start<=315;start+=50){const end=Math.min(315,start+49),words=WORDS.filter(w=>w.no>=start&&w.no<=end),total=words.length,visited=words.filter(w=>rec(w.no)?.introducedAt).length,mastered=words.filter(w=>rec(w.no)?.stage>=5&&!rec(w.no)?.needsRelearn).length;const row=document.createElement("div");row.className="band-row";const meta=document.createElement("div");meta.className="band-meta";const label=document.createElement("b");label.textContent=`No.${start}〜${end}`;const small=document.createElement("small");small.textContent=`着手 ${visited}/${total} · 定着 ${mastered}/${total}`;meta.append(label,small);const bg=document.createElement("div");bg.className="band-bar";const visit=document.createElement("div");visit.className="band-visited";visit.style.width=`${visited/total*100}%`;const strong=document.createElement("div");strong.className="band-stable";strong.style.width=`${mastered/total*100}%`;bg.append(visit,strong);row.append(meta,bg);bands.appendChild(row)}
+ const chart=$("dailyChart");chart.replaceChildren();const k=dayKey(),dates=Array.from({length:14},(_,i)=>addDays(k,i-13)),values=dates.map(k=>getDailyLog(k).answers||0),max=Math.max(1,...values);for(let i=0;i<14;i++){const bar=document.createElement("div");bar.className="mini-bar"+(i===13?" today":"");bar.title=`${dates[i]}：${values[i]}回答`;const body=document.createElement("div");body.style.height=`${values[i]?Math.max(4,values[i]/max*100):3}%`;bar.appendChild(body);chart.appendChild(bar)}$("chartStart").textContent=dateLabel(dates[0]);$("chartEnd").textContent=dateLabel(dates[13]);$("timerSetting").value=String(DB.settings.timerSeconds);$("capSetting").value=String(DB.settings.reviewCap)}
+function exportHistory(){const text=JSON.stringify({format:"kobun315-daily5",version:2,exportedAt:new Date().toISOString(),records:DB.records,daily:DB.daily,settings:DB.settings,firstUsed:DB.firstUsed},null,2);const blob=new Blob([text],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`kobun315-study-${dayKey()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function validateImport(raw){if(!raw||typeof raw!=="object")throw Error("読み込めるJSONではありません");const source=raw.records||raw.state;if(!source||typeof source!=="object"||Array.isArray(source))throw Error("単語の履歴データが見つかりません");const validated={};let n=0;for(const w of WORDS){const s=source[String(w.no)];if(!s||!Number.isFinite(Number(s.attempts))||Number(s.attempts)<0)continue;const fromNew=!!(s.introducedAt||s.dueDate||typeof s.stage==="number");let entry;if(fromNew){entry={introducedAt:/^\d{4}-\d\d-\d\d$/.test(s.introducedAt||"")?s.introducedAt:null,stage:Math.min(7,Math.max(0,asInt(s.stage))),dueDate:/^\d{4}-\d\d-\d\d$/.test(s.dueDate||"")?s.dueDate:null,needsRelearn:!!s.needsRelearn,attempts:asInt(s.attempts),corrects:Math.min(asInt(s.attempts),Math.max(0,asInt(s.corrects))),lapses:Math.max(0,asInt(s.lapses)),lastResult:String(s.lastResult||""),lastReviewedAt:s.lastReviewedAt||null,lastMs:Number.isFinite(Number(s.lastMs))?Number(s.lastMs):null}}else{const bad=s.lastResult==="wrong"||s.lastResult==="timeout";const intro=dayFromMillis(Number(s.lastSeen))||addDays(dayKey(),-1);entry={introducedAt:intro,stage:bad?0:1,dueDate:bad?addDays(dayKey(),1):dayFromMillis(Number(s.due))||addDays(dayKey(),1),needsRelearn:bad,attempts:asInt(s.attempts),corrects:Math.max(0,asInt(s.corrects)),lapses:Math.max(0,asInt(s.lapses)),lastResult:bad?"wrong":"right",lastReviewedAt:intro,lastMs:Number.isFinite(Number(s.lastLatency))?Number(s.lastLatency):null}}if(entry.introducedAt){validated[String(w.no)]=entry;n++}}
+ if(n===0&&!Object.keys(source).length)return {records:{},daily:{},settings:{timerSeconds:5,reviewCap:20}};if(n===0)throw Error("有効な学習履歴がありません");const log=raw.daily&&typeof raw.daily==="object"&&!Array.isArray(raw.daily)?raw.daily:{};const settings=raw.settings&&typeof raw.settings==="object"?raw.settings:{};return {records:validated,daily:log,settings:{timerSeconds:[5,8,10].includes(Number(settings.timerSeconds))?Number(settings.timerSeconds):5,reviewCap:[0,10,20,30].includes(Number(settings.reviewCap))?Number(settings.reviewCap):20}}}
+function importHistory(file){if(!file)return;if(file.size>3_000_000){toast("ファイルが大きすぎます（3MBまで）");return}const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(String(reader.result));const ready=validateImport(parsed);if(!confirm("現在の学習履歴を、読み込んだ履歴で置き換えます。よろしいですか？"))return;DB.records=ready.records;DB.daily=ready.daily;DB.settings=ready.settings;DB.session=null;sessionResult=null;persist();renderStats();renderHome();showTab("homeView");toast("学習履歴を読み込みました")}catch(e){alert(`読み込みに失敗しました：${e.message}`)}};reader.onerror=()=>toast("ファイルを開けませんでした");reader.readAsText(file)}
+function bindUI(){document.querySelectorAll(".nav-item").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.view)));$("dailyStart").onclick=()=>buildSession("daily");$("reviewOnly").onclick=()=>buildSession("review");$("weakQuick").onclick=()=>buildSession("weak");$("weakStart").onclick=()=>buildSession("weak");$("idleStart").onclick=()=>buildSession("daily");$("resultHome").onclick=()=>{sessionResult=null;showTab("homeView")};$("resultWeak").onclick=()=>{sessionResult=null;buildSession("weak")};$("weakSearch").addEventListener("input",renderWeak);document.querySelectorAll(".filter").forEach(b=>b.onclick=()=>{weakFilter=b.dataset.filter;renderWeak()});$("timerSetting").onchange=()=>{DB.settings.timerSeconds=Number($("timerSetting").value);persist();toast("制限時間を変更しました")};$("capSetting").onchange=()=>{DB.settings.reviewCap=Number($("capSetting").value);persist();renderHome();toast("次のセッションから復習上限を適用します")};$("exportBtn").onclick=exportHistory;$("importBtn").onclick=()=>$("importFile").click();$("importFile").onchange=e=>{importHistory(e.target.files[0]);e.target.value=""};$("resetBtn").onclick=()=>{if(!confirm("315語の学習記録をすべて削除して最初から始めます。よろしいですか？"))return;if(!confirm("最終確認：記録をリセットしますか？"))return;DB=defaultDB();sessionResult=null;persist();showTab("homeView");toast("学習履歴を初期化しました")};document.addEventListener("visibilitychange",()=>{if(document.hidden)pauseTimer();else if(activeTab==="studyView"&&DB.session?.phase==="ask")startTimer()});window.addEventListener("pagehide",pauseTimer);window.addEventListener("keydown",e=>{if(e.key==="Enter"&&activeTab==="studyView"&&DB.session?.phase==="ask"&&!e.repeat&&!(e.target instanceof HTMLButtonElement)){e.preventDefault();beginCompare()}})}
+// 古い学習記録を移行した場合も、新しい保存先だけに書き込む。元の記録は残しておく。
+bindUI();persist();renderHome();if(DB.session&&(!Array.isArray(DB.session.queue)||typeof DB.session.index!=="number")){DB.session=null;persist()}
 </script>
 </body>
 </html>
